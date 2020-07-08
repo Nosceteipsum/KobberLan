@@ -21,4 +21,4 @@ NewtonsoftJson (https://github.com/JamesNK/Newtonsoft.Json)
 If you want to support my time/work feel free to donate to me:  
 Paypal: http://paypal.me/mightycodedragon  
 Bitcoin: https://commerce.coinbase.com/checkout/f7793326-52f9-40c1-8009-0d5a25d9ae01  
-Buy one of my games: https://store.steampowered.com/developer/MightyCodeDragon
+Buy one of my games: https://store.steampowered.com/search/?developer=MightyCodeDragon
