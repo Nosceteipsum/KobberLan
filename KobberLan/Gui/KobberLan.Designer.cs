@@ -26,13 +26,10 @@ namespace KobberLan
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(KobberLan));
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BroadCastTimer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flowLayoutPanel_SuggestedGames = new System.Windows.Forms.FlowLayoutPanel();
-            this.logs00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.errors00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.warnings00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suggestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suggestGameFromHDDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.suggestGameFromInternetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,16 +37,37 @@ namespace KobberLan
             this.broadcastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.otherPlayersJoinedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resendBroadcastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logs00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.errors00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.warnings00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flowLayoutPanel_SuggestedGames = new System.Windows.Forms.FlowLayoutPanel();
+            this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIcon1
             // 
             this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(94, 26);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // BroadCastTimer
             // 
@@ -68,47 +86,6 @@ namespace KobberLan
             this.menuStrip1.Size = new System.Drawing.Size(606, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // aboutToolStripMenuItem
-            // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // flowLayoutPanel_SuggestedGames
-            // 
-            this.flowLayoutPanel_SuggestedGames.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel_SuggestedGames.AutoScroll = true;
-            this.flowLayoutPanel_SuggestedGames.Location = new System.Drawing.Point(0, 27);
-            this.flowLayoutPanel_SuggestedGames.Name = "flowLayoutPanel_SuggestedGames";
-            this.flowLayoutPanel_SuggestedGames.Size = new System.Drawing.Size(606, 637);
-            this.flowLayoutPanel_SuggestedGames.TabIndex = 0;
-            // 
-            // logs00ToolStripMenuItem
-            // 
-            this.logs00ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.errors00ToolStripMenuItem,
-            this.warnings00ToolStripMenuItem});
-            this.logs00ToolStripMenuItem.Name = "logs00ToolStripMenuItem";
-            this.logs00ToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.logs00ToolStripMenuItem.Text = "Logs";
-            // 
-            // errors00ToolStripMenuItem
-            // 
-            this.errors00ToolStripMenuItem.Name = "errors00ToolStripMenuItem";
-            this.errors00ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.errors00ToolStripMenuItem.Text = "Errors: 00";
-            this.errors00ToolStripMenuItem.Click += new System.EventHandler(this.errorsToolStripMenuItem_Click);
-            // 
-            // warnings00ToolStripMenuItem
-            // 
-            this.warnings00ToolStripMenuItem.Name = "warnings00ToolStripMenuItem";
-            this.warnings00ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.warnings00ToolStripMenuItem.Text = "Warnings: 00";
-            this.warnings00ToolStripMenuItem.Click += new System.EventHandler(this.warningsToolStripMenuItem_Click);
             // 
             // suggestToolStripMenuItem
             // 
@@ -164,6 +141,47 @@ namespace KobberLan
             this.resendBroadcastToolStripMenuItem.Text = "Resend broadcast";
             this.resendBroadcastToolStripMenuItem.Click += new System.EventHandler(this.button_broadcast_Click);
             // 
+            // logs00ToolStripMenuItem
+            // 
+            this.logs00ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.errors00ToolStripMenuItem,
+            this.warnings00ToolStripMenuItem});
+            this.logs00ToolStripMenuItem.Name = "logs00ToolStripMenuItem";
+            this.logs00ToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.logs00ToolStripMenuItem.Text = "Logs";
+            // 
+            // errors00ToolStripMenuItem
+            // 
+            this.errors00ToolStripMenuItem.Name = "errors00ToolStripMenuItem";
+            this.errors00ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.errors00ToolStripMenuItem.Text = "Errors: 00";
+            this.errors00ToolStripMenuItem.Click += new System.EventHandler(this.errorsToolStripMenuItem_Click);
+            // 
+            // warnings00ToolStripMenuItem
+            // 
+            this.warnings00ToolStripMenuItem.Name = "warnings00ToolStripMenuItem";
+            this.warnings00ToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.warnings00ToolStripMenuItem.Text = "Warnings: 00";
+            this.warnings00ToolStripMenuItem.Click += new System.EventHandler(this.warningsToolStripMenuItem_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // flowLayoutPanel_SuggestedGames
+            // 
+            this.flowLayoutPanel_SuggestedGames.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel_SuggestedGames.AutoScroll = true;
+            this.flowLayoutPanel_SuggestedGames.Location = new System.Drawing.Point(0, 27);
+            this.flowLayoutPanel_SuggestedGames.Name = "flowLayoutPanel_SuggestedGames";
+            this.flowLayoutPanel_SuggestedGames.Size = new System.Drawing.Size(606, 637);
+            this.flowLayoutPanel_SuggestedGames.TabIndex = 0;
+            // 
             // KobberLan
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -178,6 +196,7 @@ namespace KobberLan
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.KobberLan_FormClosing);
             this.Load += new System.EventHandler(this.KobberLan_Load);
             this.Resize += new System.EventHandler(this.KobberLan_Resize);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -201,6 +220,8 @@ namespace KobberLan
         private System.Windows.Forms.ToolStripMenuItem broadcastToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem otherPlayersJoinedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resendBroadcastToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

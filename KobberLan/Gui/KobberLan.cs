@@ -206,28 +206,37 @@ namespace KobberLan
         private void KobberLan_FormClosing(object sender, FormClosingEventArgs e)
         //-------------------------------------------------------------
         {
-            //-------------------------------------------------------------
-            //Close broadcast
-            //-------------------------------------------------------------
-            if (broadcast != null)
+            //Minimize instead
+            if(e.CloseReason == CloseReason.UserClosing)
             {
-                broadcast.CloseAll();
-                broadcast = null;
+                Hide();
+                e.Cancel = true;
             }
-
-            //-------------------------------------------------------------
-            //Close communication
-            //-------------------------------------------------------------
-            if (communication != null)
+            else
             {
-                communication.CloseAll();
-                communication = null;
-            }
+                //-------------------------------------------------------------
+                //Close broadcast
+                //-------------------------------------------------------------
+                if (broadcast != null)
+                {
+                    broadcast.CloseAll();
+                    broadcast = null;
+                }
 
-            //-------------------------------------------------------------
-            //Remove icon
-            //-------------------------------------------------------------
-            notifyIcon1.Visible = false;
+                //-------------------------------------------------------------
+                //Close communication
+                //-------------------------------------------------------------
+                if (communication != null)
+                {
+                    communication.CloseAll();
+                    communication = null;
+                }
+
+                //-------------------------------------------------------------
+                //Remove icon
+                //-------------------------------------------------------------
+                notifyIcon1.Visible = false;            
+                }
         }
 
         //-------------------------------------------------------------
@@ -447,11 +456,21 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
-        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         //-------------------------------------------------------------
         {
-            Show();
-            this.WindowState = FormWindowState.Normal;
+            if(e.Button == MouseButtons.Left)
+            {
+                Show();
+                this.WindowState = FormWindowState.Normal;
+            }
+        }
+
+        //-------------------------------------------------------------
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        //-------------------------------------------------------------
+        {
+            Application.Exit();
         }
 
         /*
