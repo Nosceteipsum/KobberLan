@@ -43,11 +43,17 @@
     <Reference Include="Desharp, Version=1.3.0.3, Culture=neutral, PublicKeyToken=cd60d985c52bcd6f, processorArchitecture=MSIL">
       <HintPath>packages\Desharp.1.3.0.3\lib\net40\Desharp.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Nat, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6c9468a3c21bc6d1, processorArchitecture=MSIL">
+      <HintPath>packages\Mono.Nat.2.0.1\lib\netstandard2.0\Mono.Nat.dll</HintPath>
+    </Reference>
     <Reference Include="MonoTorrent, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MonoTorrent.1.0.19\lib\netstandard2.0\MonoTorrent.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ReusableTasks, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ReusableTasks.2.0.0\lib\netstandard2.0\ReusableTasks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
