@@ -68,6 +68,11 @@ namespace KobberLan.Code
 
                 var stream = communicationClient.GetStream();
 
+                //Send data size
+                byte[] dataSize = BitConverter.GetBytes(data.Length);
+                stream.Write(dataSize, 0, 4);
+
+                //Send data
                 stream.Write(data, 0, data.Length);
 
                 stream.Close();
@@ -159,15 +164,24 @@ namespace KobberLan.Code
                         continue;
                     }
 
-                    //Wait for data from the client
-                    while (s.Available == 0 && s.Connected)
-                    {
-                        Thread.Sleep(50);
-                    }
+                    //Timeout value
+                    var watch = System.Diagnostics.Stopwatch.StartNew();
+                    s.SendTimeout    = 3000;
+                    s.ReceiveTimeout = 3000;
+
+                    //Read first 4 bytes (size of packet)
+                    byte[] dataSizeArray = new byte[4];
+                    s.Receive(dataSizeArray, 0, sizeof(int), SocketFlags.None);
+                    int dataSize = Convert.ToInt32(dataSizeArray);
 
                     //Handle data from client
-                    while (s.Available > 0 && s.Connected)
+                    while (s.Available > 0 && bytesReceived.Count != dataSize)
                     {
+                        if(watch.ElapsedMilliseconds > 5000)
+                        {
+                            throw new Exception("Communication server, WatchDog timeout");
+                        }
+
                         byte[] nextByte = new byte[1];
                         s.Receive(nextByte, 0, 1, SocketFlags.None);
                         bytesReceived.AddRange(nextByte);
