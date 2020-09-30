@@ -60,18 +60,18 @@ namespace KobberLan.Code
 
         //-------------------------------------------------------------
         // Create and start the server thread
-        public void ServerStartListening()
+        public void ServerStartListeningBroadCast()
         //-------------------------------------------------------------
         {
             Log.Get().Write("Broadcast starting server thread");
-            threadServer = new Thread(new ThreadStart(ServerListen));
+            threadServer = new Thread(new ThreadStart(ServerListenBroadCast));
             threadServerActive = true;
             threadServer.Start();
             threadClientActive = true;
         }
 
         //-------------------------------------------------------------
-        private void ServerListen()
+        private void ServerListenBroadCast()
         //-------------------------------------------------------------
         {
             if (!Helper.IsPortAvailable(BROADCAST_PORT))
