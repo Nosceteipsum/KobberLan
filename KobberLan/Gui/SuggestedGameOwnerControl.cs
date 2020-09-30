@@ -24,16 +24,20 @@ namespace KobberLan
 
         private int torrentPeers;
         private int torrentDownloadCompleted;
+        private int torrentDownloadStarted;
+
+        private bool ownSuggestions;
 
         //-------------------------------------------------------------
-        public SuggestedGameOwnerControl(DTO_Suggestion dto, string pathHDD, KobberLan parent)
+        public SuggestedGameOwnerControl(DTO_Suggestion dto, string pathHDD, KobberLan parent, bool ownSuggestions = false)
         //-------------------------------------------------------------
         {
             //Init control 
             InitializeComponent();
 
-            torrentPeers = 0;
+            torrentPeers = 1; // Inclusive owner
             torrentDownloadCompleted = 0;
+            torrentDownloadStarted = 0;
 
             metaProgress = 0;
             state = TorrentState.Starting;
@@ -54,6 +58,17 @@ namespace KobberLan
             {
                 button_Play.Enabled = true;
             }
+
+            //Hide peers/downloads/remove if not own suggestions
+            this.ownSuggestions = ownSuggestions;
+            if(!ownSuggestions)
+            {
+                pictureBox_Downloaded.Visible = false;
+                pictureBox_Peers.Visible = false;
+                label_Downloading.Visible = false;
+                label_Peers.Visible = false;
+                button_Clear.Visible = false;
+            }
         }
 
         //-------------------------------------------------------------
@@ -68,11 +83,24 @@ namespace KobberLan
         //-------------------------------------------------------------
         {
             if (torrentStatus.status == TorrentStatusType.Finished)
+            {
                 torrentDownloadCompleted++;
-            if (torrentStatus.status == TorrentStatusType.Starting)
                 torrentPeers++;
+            }
+            if (torrentStatus.status == TorrentStatusType.Starting)
+            {
+                torrentDownloadStarted++;
+            }
 
-            label_Downloading.Text = torrentDownloadCompleted.ToString("D2");
+            label_Downloading.Text = torrentDownloadCompleted.ToString("D2") + " / " + torrentDownloadStarted.ToString("D2");
+            label_Peers.Text = torrentPeers.ToString("D2");
+        }
+
+        //-------------------------------------------------------------
+        public void IncreasePeer()
+        //-------------------------------------------------------------
+        {
+            torrentPeers++;
             label_Peers.Text = torrentPeers.ToString("D2");
         }
 
@@ -185,7 +213,7 @@ namespace KobberLan
             {
                 Log.Get().Write("Start sharing: " + dto_suggestion.key);
                 button_ShareGet.Enabled = false;
-                button_Clear.Enabled = false;
+                //button_Clear.Enabled = false;
                 button_ShareGet.Text = "Stop";
 
                 //-------------------------------------------------------------

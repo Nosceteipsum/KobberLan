@@ -189,7 +189,7 @@ namespace KobberLan.Code
 
                     //Handle message
                     Log.Get().Write("Communication server got packet from client. size: " + bytesReceived.Count);
-                    HandleMessage(bytesReceived.ToArray());
+                    HandleMessage(bytesReceived.ToArray(), remoteIP.Address.ToString());
 
                     //Close connection
                     s.Close();
@@ -208,7 +208,7 @@ namespace KobberLan.Code
         }
 
         //-------------------------------------------------------------
-        private void HandleMessage(byte [] data)
+        private void HandleMessage(byte [] data,string RemoteIP)
         //-------------------------------------------------------------
         {
             Object dataObject = Helper.ByteArrayToObject(data);
@@ -218,7 +218,7 @@ namespace KobberLan.Code
                 Log.Get().Write("Communication server handle Suggestiongame: " + suggestion.title);
                 kobberLanGui.Invoke(new Action(() =>
                 {
-                    kobberLanGui.AddSuggestedGame(suggestion);
+                    kobberLanGui.AddSuggestedGame(suggestion, null, false, RemoteIP);
                 }));
             }
             else if (dataObject.GetType() == typeof(DTO_Like))
@@ -228,6 +228,15 @@ namespace KobberLan.Code
                 kobberLanGui.Invoke(new Action(() =>
                 {
                     kobberLanGui.GotLike(like);
+                }));
+            }
+            else if (dataObject.GetType() == typeof(DTO_AlreadyOwnIt))
+            {
+                DTO_AlreadyOwnIt alreadyOwnIt = (DTO_AlreadyOwnIt)dataObject;
+                Log.Get().Write("Communication server handle alreadyOwnIt: " + alreadyOwnIt.key);
+                kobberLanGui.Invoke(new Action(() =>
+                {
+                    kobberLanGui.GotAlreadyOwnIt(alreadyOwnIt);
                 }));
             }
             else if (dataObject.GetType() == typeof(DTO_Torrent))

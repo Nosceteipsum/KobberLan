@@ -43,7 +43,7 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
-        public void AddSuggestedGame(DTO_Suggestion suggestion, string path = null)
+        public void AddSuggestedGame(DTO_Suggestion suggestion, string path = null, bool ownSuggestions = false, string remoteIP = "")
         //-------------------------------------------------------------
         {
             //Check if title exist
@@ -54,12 +54,27 @@ namespace KobberLan
                 if(suggestion.type == SuggestionType.Internet)
                     suggestedGame = new SuggestedGameInternetControl(suggestion, this);
                 else if (!String.IsNullOrEmpty(path))
-                    suggestedGame = new SuggestedGameOwnerControl(suggestion, path, this);
+                {
+                    //Already own the game, tell server about it
+                    if(!ownSuggestions)
+                    {
+                        DTO_AlreadyOwnIt alreadyOwnIt = new DTO_AlreadyOwnIt() { address = Helper.getHostIP(), key = suggestion.key };
+                        communication.ClientSend(alreadyOwnIt, remoteIP);
+                    }
+
+                    //Add game as owner
+                    suggestedGame = new SuggestedGameOwnerControl(suggestion, path, this, ownSuggestions);
+                }
                 else
                     suggestedGame = new SuggestedGameControl(suggestion, this);
 
                 flowLayoutPanel_SuggestedGames.Controls.Add(suggestedGame);
                 suggestedGames.Add(suggestedGame);
+            }
+            else 
+            {
+                //Warning, tried to add already exisiting game
+                Log.Get().Write("Game " + suggestion.key + " already exist", Log.LogType.Warning);
             }
         }
 
@@ -177,6 +192,21 @@ namespace KobberLan
             else
             {
                 suggestedGameControl.UpdateLike(like);
+            }
+        }
+
+        //-------------------------------------------------------------
+        public void GotAlreadyOwnIt(DTO_AlreadyOwnIt alreadyOwnIt)
+        //-------------------------------------------------------------
+        {
+            SuggestedGame suggestedGameControl = suggestedGames.Where(L => L.GetKey().Equals(alreadyOwnIt.key) && L.GetType() == typeof(SuggestedGameOwnerControl)).FirstOrDefault();
+            if(suggestedGameControl == null)
+            {
+                Log.Get().Write("KobberLan DTO_AlreadyOwnIt unknown title: " + alreadyOwnIt.key, Log.LogType.Error);
+            }
+            else
+            {
+                ((SuggestedGameOwnerControl)suggestedGameControl).IncreasePeer();
             }
         }
 
@@ -380,7 +410,7 @@ namespace KobberLan
             communication.ClientSend(game);
 
             //Update own GUI with suggested game
-            AddSuggestedGame(game, folder);
+            AddSuggestedGame(game, folder, true);
         }
 
         //-------------------------------------------------------------

@@ -88,7 +88,7 @@
             // label_likes
             // 
             this.label_likes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_likes.Location = new System.Drawing.Point(30, 253);
+            this.label_likes.Location = new System.Drawing.Point(22, 253);
             this.label_likes.Name = "label_likes";
             this.label_likes.Size = new System.Drawing.Size(32, 16);
             this.label_likes.TabIndex = 6;
@@ -97,20 +97,20 @@
             // label_Downloading
             // 
             this.label_Downloading.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_Downloading.Location = new System.Drawing.Point(103, 254);
+            this.label_Downloading.Location = new System.Drawing.Point(82, 254);
             this.label_Downloading.Name = "label_Downloading";
-            this.label_Downloading.Size = new System.Drawing.Size(29, 16);
+            this.label_Downloading.Size = new System.Drawing.Size(68, 16);
             this.label_Downloading.TabIndex = 8;
-            this.label_Downloading.Text = "00";
+            this.label_Downloading.Text = "00 / 00";
             this.label_Downloading.Visible = false;
             // 
             // pictureBox_Downloaded
             // 
             this.pictureBox_Downloaded.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox_Downloaded.Image = global::KobberLan.Properties.Resources.Floppy;
-            this.pictureBox_Downloaded.Location = new System.Drawing.Point(81, 255);
+            this.pictureBox_Downloaded.Location = new System.Drawing.Point(65, 255);
             this.pictureBox_Downloaded.Name = "pictureBox_Downloaded";
-            this.pictureBox_Downloaded.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox_Downloaded.Size = new System.Drawing.Size(21, 16);
             this.pictureBox_Downloaded.TabIndex = 7;
             this.pictureBox_Downloaded.TabStop = false;
             this.pictureBox_Downloaded.Visible = false;
@@ -119,7 +119,7 @@
             // 
             this.pictureBox2.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox2.Image = global::KobberLan.Properties.Resources.ThumbsUp;
-            this.pictureBox2.Location = new System.Drawing.Point(10, 254);
+            this.pictureBox2.Location = new System.Drawing.Point(7, 254);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(16, 16);
             this.pictureBox2.TabIndex = 5;
@@ -140,7 +140,7 @@
             // label_Peers
             // 
             this.label_Peers.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_Peers.Location = new System.Drawing.Point(170, 253);
+            this.label_Peers.Location = new System.Drawing.Point(176, 253);
             this.label_Peers.Name = "label_Peers";
             this.label_Peers.Size = new System.Drawing.Size(29, 16);
             this.label_Peers.TabIndex = 10;
@@ -151,7 +151,7 @@
             // 
             this.pictureBox_Peers.BackColor = System.Drawing.SystemColors.Control;
             this.pictureBox_Peers.Image = global::KobberLan.Properties.Resources.Person;
-            this.pictureBox_Peers.Location = new System.Drawing.Point(149, 255);
+            this.pictureBox_Peers.Location = new System.Drawing.Point(160, 255);
             this.pictureBox_Peers.Name = "pictureBox_Peers";
             this.pictureBox_Peers.Size = new System.Drawing.Size(16, 16);
             this.pictureBox_Peers.TabIndex = 9;
