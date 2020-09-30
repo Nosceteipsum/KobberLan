@@ -259,7 +259,7 @@ namespace KobberLan
             //-------------------------------------------------------------
             //Start server listening for broadcast
             //-------------------------------------------------------------
-            broadcast.ServerStartListening();
+            broadcast.ServerStartListeningBroadCast();
 
             //-------------------------------------------------------------
             //Start server listening for Communication
