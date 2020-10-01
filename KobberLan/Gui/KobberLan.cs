@@ -157,6 +157,7 @@ namespace KobberLan
                 //Remove game
                 if(torrentStatus.status == TorrentStatusType.Remove)
                 {
+                    suggestedGames.Remove(suggestedGameControl);
                     flowLayoutPanel_SuggestedGames.Controls.Remove(suggestedGameControl);
                 }
                 else //Update controller status
