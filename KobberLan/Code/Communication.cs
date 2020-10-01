@@ -177,6 +177,7 @@ namespace KobberLan.Code
                     byte[] dataSizeArray = new byte[sizeof(int)];
                     s.Receive(dataSizeArray, 0, sizeof(int), SocketFlags.None);
                     int dataSize = BitConverter.ToInt32(dataSizeArray, 0);
+                    Log.Get().Write("Communication server got size packet from client. datasize: " + dataSize);
 
                     //Handle data from client
                     while (s.Available > 0 && bytesReceived.Count != dataSize)
@@ -211,7 +212,6 @@ namespace KobberLan.Code
                 catch (Exception ex)
                 {
                     Log.Get().Write("Communication server exception: " + ex, Log.LogType.Error);
-                    threadServerActive = false;
                 }
             }
 
