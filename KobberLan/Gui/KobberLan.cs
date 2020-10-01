@@ -604,6 +604,7 @@ namespace KobberLan
         public void SetErrors(int errors)
         //-------------------------------------------------------------
         {
+            logs00ToolStripMenuItem.BackColor = Color.Red;
             errors00ToolStripMenuItem.Text = "Errors: " + errors.ToString("D2");
         }
 
@@ -611,6 +612,9 @@ namespace KobberLan
         public void SetWarnings(int warnings)
         //-------------------------------------------------------------
         {
+            if(logs00ToolStripMenuItem.BackColor != Color.Red)
+                logs00ToolStripMenuItem.BackColor = Color.LightYellow;
+
             warnings00ToolStripMenuItem.Text = "Warnings: " + warnings.ToString("D2");
         }
 
