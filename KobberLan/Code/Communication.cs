@@ -176,7 +176,7 @@ namespace KobberLan.Code
                     //Read first 4 bytes (size of packet)
                     byte[] dataSizeArray = new byte[sizeof(int)];
                     s.Receive(dataSizeArray, 0, sizeof(int), SocketFlags.None);
-                    int dataSize = Convert.ToInt32(dataSizeArray);
+                    int dataSize = BitConverter.ToInt32(dataSizeArray, 0);
 
                     //Handle data from client
                     while (s.Available > 0 && bytesReceived.Count != dataSize)
