@@ -109,14 +109,20 @@ namespace KobberLan.Code
             //-------------------------------------------------------------
             {
                 Debug.WriteLine(msg);
-                if(kobberLan != null) kobberLan.SetErrors(++errors);
+                kobberLan.Invoke(new Action(() =>
+                {
+                    if(kobberLan != null) kobberLan.SetErrors(++errors);
+                }));
             }
             //-------------------------------------------------------------
             else if (logType == LogType.Warning) //Always log warnings
             //-------------------------------------------------------------
             {
                 Debug.WriteLine(msg);
-                if (kobberLan != null) kobberLan.SetWarnings(++warnings);
+                kobberLan.Invoke(new Action(() =>
+                {
+                    if (kobberLan != null) kobberLan.SetWarnings(++warnings);
+                }));
             }
             //-------------------------------------------------------------
             else //Information
