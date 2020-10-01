@@ -267,12 +267,12 @@ namespace KobberLan.Code
         {
             MonoTorrent.Torrent torrent = MonoTorrent.Torrent.Load(torrentData);
             torrent.AnnounceUrls.Clear();
-            torrent.AnnounceUrls.Add(new RawTrackerTier(new[] { "http://" + Helper.getHostIP().ToString() + ":" + TRACKERHTTP_PORT + "/announce", "udp://" + Helper.getHostIP().ToString() + ":" + TRACKERUDP_PORT }));
+            torrent.AnnounceUrls.Add(new RawTrackerTier(new[] { "http://" + Helper.GetHostIP().ToString() + ":" + TRACKERHTTP_PORT + "/announce", "udp://" + Helper.GetHostIP().ToString() + ":" + TRACKERUDP_PORT }));
 
             byte[] result = null;
             TorrentEditor torrentEditor = new TorrentEditor(torrent);
             torrentEditor.Announces.Clear();
-            torrentEditor.Announces.Add(new RawTrackerTier(new[] { "http://" + Helper.getHostIP().ToString() + ":" + TRACKERHTTP_PORT + "/announce", "udp://" + Helper.getHostIP().ToString() + ":" + TRACKERUDP_PORT }));
+            torrentEditor.Announces.Add(new RawTrackerTier(new[] { "http://" + Helper.GetHostIP().ToString() + ":" + TRACKERHTTP_PORT + "/announce", "udp://" + Helper.GetHostIP().ToString() + ":" + TRACKERUDP_PORT }));
             var dict = torrentEditor.ToDictionary();
             result = dict.Encode();
 

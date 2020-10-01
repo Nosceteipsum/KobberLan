@@ -44,7 +44,7 @@ namespace KobberLan.Code
             playersFound = new List<IPAddress>();
             kobberLanGui = gui;
 
-            Log.Get().Write("Broadcast own IP: " + Helper.getHostIP() );
+            Log.Get().Write("Broadcast own IP: " + Helper.GetHostIP() );
         }
 
         //-------------------------------------------------------------
@@ -86,7 +86,7 @@ namespace KobberLan.Code
                 try
                 {
                     Log.Get().Write("Broadcast server waiting for client message");
-                    var ClientEp = new IPEndPoint(IPAddress.Any, 0);
+                    var ClientEp = new IPEndPoint(IPAddress.Any, BROADCAST_PORT); //Note, reference and auto filled
 
                     //Block until message from a client
                     var ClientRequestData = broadcastServer.Receive(ref ClientEp);
@@ -139,13 +139,13 @@ namespace KobberLan.Code
         //-------------------------------------------------------------
         {
             Log.Get().Write("Broadcast client broadcasting message");
-            broadcastClient.Send(Encoding.ASCII.GetBytes(BROADCAST_MESSAGE), BROADCAST_MESSAGE.Length, new IPEndPoint(IPAddress.Broadcast, BROADCAST_PORT));
+            broadcastClient.Send(Encoding.ASCII.GetBytes(BROADCAST_MESSAGE), BROADCAST_MESSAGE.Length, new IPEndPoint(Helper.GetHostIPBroadcastAddress(), BROADCAST_PORT));
 
             while(threadClientActive)
             {
                 try
                 {
-                    IPEndPoint broadcastAdress = new IPEndPoint(IPAddress.Any, 0);
+                    IPEndPoint broadcastAdress = new IPEndPoint(IPAddress.Any, BROADCAST_PORT); //Note, reference and auto filled
 
                     //Block until message from a server/listener
                     var ServerResponseData = broadcastClient.Receive(ref broadcastAdress);
@@ -159,7 +159,9 @@ namespace KobberLan.Code
                 {
                     if (threadServerActive == false) { } // Ignore, program shutting down
                     else
+                    {
                         Log.Get().Write("Broadcast client Socket exception: " + socketEx, Log.LogType.Error);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -193,7 +195,7 @@ namespace KobberLan.Code
                     Log.Get().Write("Broadcast handling message. Another player responded by broadcast: " + otherIPAddress.Address.ToString());
 
                     //Ignore own server
-                    if (Helper.getHostIP().ToString().Equals(otherIPAddress.Address.ToString()))
+                    if (Helper.GetHostIP().ToString().Equals(otherIPAddress.Address.ToString()))
                     {
                         Log.Get().Write("Broadcast ignore own server", Log.LogType.Info);
                     }

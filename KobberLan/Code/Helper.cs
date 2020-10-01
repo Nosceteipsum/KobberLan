@@ -19,6 +19,8 @@ namespace KobberLan.Code
     public class Helper
     //-------------------------------------------------------------
     {
+        private static UnicastIPAddressInformation ip;
+
         //-------------------------------------------------------------
         public static string GetDirection()
         //-------------------------------------------------------------
@@ -59,16 +61,35 @@ namespace KobberLan.Code
         }
 
         //-------------------------------------------------------------
-        public static IPAddress getHostIP()
+        public static void SetHostIP(UnicastIPAddressInformation IP)
         //-------------------------------------------------------------
         {
-            foreach (IPAddress ip in (Dns.GetHostEntry(Dns.GetHostName())).AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    return ip;
-            }
+            ip = IP;
+        }
 
-            return null;
+        //-------------------------------------------------------------
+        public static IPAddress GetHostIP()
+        //-------------------------------------------------------------
+        {
+            return ip.Address;
+        }
+
+        //-------------------------------------------------------------
+        public static IPAddress GetHostIPBroadcastAddress()
+        //-------------------------------------------------------------
+        {
+            return GetBroadcastAddress(ip.Address, ip.IPv4Mask);
+        }
+
+        //-------------------------------------------------------------
+        public static IPAddress GetBroadcastAddress(IPAddress address, IPAddress mask)
+        //-------------------------------------------------------------
+        {
+            uint ipAddress = BitConverter.ToUInt32(address.GetAddressBytes(), 0);
+            uint ipMaskV4 = BitConverter.ToUInt32(mask.GetAddressBytes(), 0);
+            uint broadCastIpAddress = ipAddress | ~ipMaskV4;
+
+            return new IPAddress(BitConverter.GetBytes(broadCastIpAddress));
         }
 
         //-------------------------------------------------------------

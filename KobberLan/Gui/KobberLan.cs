@@ -25,6 +25,7 @@ namespace KobberLan
         private Communication communication;
         private List<SuggestedGame> suggestedGames;
         private SuggestInternetGame suggestForm;
+        private ChooseNetworkInterface chooseNetworkInterface;
 
         //-------------------------------------------------------------
         public KobberLan()
@@ -58,7 +59,7 @@ namespace KobberLan
                     //Already own the game, tell server about it
                     if(!ownSuggestions)
                     {
-                        DTO_AlreadyOwnIt alreadyOwnIt = new DTO_AlreadyOwnIt() { address = Helper.getHostIP(), key = suggestion.key };
+                        DTO_AlreadyOwnIt alreadyOwnIt = new DTO_AlreadyOwnIt() { address = Helper.GetHostIP(), key = suggestion.key };
                         communication.ClientSend(alreadyOwnIt, remoteIP);
                     }
 
@@ -274,6 +275,18 @@ namespace KobberLan
         //-------------------------------------------------------------
         {
             //-------------------------------------------------------------
+            //Check if computer has multiple network interfaces
+            //-------------------------------------------------------------
+            chooseNetworkInterface = new ChooseNetworkInterface();
+            if(chooseNetworkInterface.GetActiveNetworkInterfaces().Count > 1)
+            {
+                //-------------------------------------------------------------
+                //Only show dialog if more than 1 network interfaces
+                //-------------------------------------------------------------
+                chooseNetworkInterface.ShowDialog();
+            }
+
+            //-------------------------------------------------------------
             //Init default values
             //-------------------------------------------------------------
             notifyIcon1.Text = "KobberLan";
@@ -388,7 +401,7 @@ namespace KobberLan
             {
                 type = Code.SuggestionType.HDD,
                 title = "Unknown",
-                author = Helper.getHostIP().ToString(),
+                author = Helper.GetHostIP().ToString(),
                 imageCover = Properties.Resources.no_cover //Default image
             };
 
@@ -438,7 +451,7 @@ namespace KobberLan
             {
                 type = Code.SuggestionType.Internet,
                 title = "Unknown",
-                author = Helper.getHostIP().ToString(),
+                author = Helper.GetHostIP().ToString(),
                 imageCover = Properties.Resources.no_cover //Default image
             };
 
@@ -672,6 +685,13 @@ namespace KobberLan
         //-------------------------------------------------------------
         {
             errorsToolStripMenuItem_Click(sender, e);
+        }
+
+        //-------------------------------------------------------------
+        private void networkInterfaceToolStripMenuItem_Click(object sender, EventArgs e)
+        //-------------------------------------------------------------
+        {
+            chooseNetworkInterface.ShowDialog();
         }
     }
 }

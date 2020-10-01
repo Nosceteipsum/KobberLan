@@ -87,7 +87,7 @@ namespace KobberLan
         {
             button_like.Enabled = false;
 
-            DTO_Like like = new DTO_Like() { address = Helper.getHostIP(), key = GetKey() };
+            DTO_Like like = new DTO_Like() { address = Helper.GetHostIP(), key = GetKey() };
             kobberLan.SendLike(like); // Parent.Parent.Parent => Flow.Groupbox.Form
         }
 

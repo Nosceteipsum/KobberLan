@@ -289,7 +289,7 @@ namespace KobberLan
         {
             button_like.Enabled = false;
 
-            DTO_Like like = new DTO_Like() { address = Helper.getHostIP(), key = GetKey() };
+            DTO_Like like = new DTO_Like() { address = Helper.GetHostIP(), key = GetKey() };
             kobberLan.SendLike(like); // Parent.Parent.Parent => Flow.Groupbox.Form
         }
 
@@ -330,7 +330,7 @@ namespace KobberLan
         private void button_Clear_Click(object sender, EventArgs e)
         //-------------------------------------------------------------
         {
-            DTO_TorrentStatus torrentStatus = new DTO_TorrentStatus() { key = dto_suggestion.key, address = Helper.getHostIP(), status = TorrentStatusType.Remove };
+            DTO_TorrentStatus torrentStatus = new DTO_TorrentStatus() { key = dto_suggestion.key, address = Helper.GetHostIP(), status = TorrentStatusType.Remove };
             kobberLan.SendTorrentStatus(torrentStatus, ""); //Empty IP, broadcast to all connected clients
         }
 

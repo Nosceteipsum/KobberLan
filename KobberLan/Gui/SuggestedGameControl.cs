@@ -109,7 +109,7 @@ namespace KobberLan
                 if (finishedDownloaded == false)
                 {
                     finishedDownloaded = true;
-                    DTO_TorrentStatus torrentStatus = new DTO_TorrentStatus() { key = dto_suggestion.key, address = Helper.getHostIP(), status = TorrentStatusType.Finished };
+                    DTO_TorrentStatus torrentStatus = new DTO_TorrentStatus() { key = dto_suggestion.key, address = Helper.GetHostIP(), status = TorrentStatusType.Finished };
                     kobberLan.SendTorrentStatus(torrentStatus, dto_suggestion.author);
                 }
 
@@ -208,7 +208,7 @@ namespace KobberLan
                 //-------------------------------------------------------------
                 //Note host about starting to download
                 //-------------------------------------------------------------
-                DTO_TorrentStatus torrentStatus = new DTO_TorrentStatus() { key = dto_suggestion.key, address = Helper.getHostIP(), status = TorrentStatusType.Starting };
+                DTO_TorrentStatus torrentStatus = new DTO_TorrentStatus() { key = dto_suggestion.key, address = Helper.GetHostIP(), status = TorrentStatusType.Starting };
                 kobberLan.SendTorrentStatus(torrentStatus, dto_suggestion.author);
 
                 //-------------------------------------------------------------
@@ -230,7 +230,7 @@ namespace KobberLan
         {
             button_like.Enabled = false;
 
-            DTO_Like like = new DTO_Like() { address = Helper.getHostIP(), key = GetKey() };
+            DTO_Like like = new DTO_Like() { address = Helper.GetHostIP(), key = GetKey() };
             kobberLan.SendLike(like); // Parent.Parent.Parent => Flow.Groupbox.Form
         }
 

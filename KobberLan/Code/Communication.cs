@@ -146,7 +146,7 @@ namespace KobberLan.Code
                 Log.Get().Write("Failed starting communication server on port: " + COMMUNICATION_PORT + " Port in use", Log.LogType.Error);
             }
 
-            communicationServer = new TcpListener(Helper.getHostIP() , COMMUNICATION_PORT); // IPAddress.Any
+            communicationServer = new TcpListener(Helper.GetHostIP() , COMMUNICATION_PORT); // IPAddress.Any
             communicationServer.Start();
             while (threadServerActive)
             {
@@ -161,7 +161,7 @@ namespace KobberLan.Code
 
                     //Ignore own IP
                     IPEndPoint remoteIP = (IPEndPoint)s.RemoteEndPoint;
-                    if (remoteIP.Address.Equals("127.0.0.1") || remoteIP.Address.Equals(Helper.getHostIP()))
+                    if (remoteIP.Address.Equals("127.0.0.1") || remoteIP.Address.Equals(Helper.GetHostIP()))
                     {
                         Log.Get().Write("Ignore own connection");
                         s.Close();
@@ -201,6 +201,12 @@ namespace KobberLan.Code
                     //Clear data
                     bytesReceived.Clear();
                     bytesReceived = null;
+                }
+                catch (SocketException socketEx)
+                {
+                    if (threadServerActive == false) { } // Ignore, program shutting down
+                    else
+                        Log.Get().Write("Communication server socket exception: " + socketEx, Log.LogType.Error);
                 }
                 catch (Exception ex)
                 {

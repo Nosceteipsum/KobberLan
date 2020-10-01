@@ -105,6 +105,12 @@
     <Compile Include="Gui\ChooseGameControl.Designer.cs">
       <DependentUpon>ChooseGameControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gui\ChooseNetworkInterface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\ChooseNetworkInterface.Designer.cs">
+      <DependentUpon>ChooseNetworkInterface.cs</DependentUpon>
+    </Compile>
     <Compile Include="Gui\OverviewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -154,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\ChooseGameControl.resx">
       <DependentUpon>ChooseGameControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gui\ChooseNetworkInterface.resx">
+      <DependentUpon>ChooseNetworkInterface.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\KobberLan.resx">
       <DependentUpon>KobberLan.cs</DependentUpon>

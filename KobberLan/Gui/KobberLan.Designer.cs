@@ -42,6 +42,7 @@ namespace KobberLan
             this.warnings00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flowLayoutPanel_SuggestedGames = new System.Windows.Forms.FlowLayoutPanel();
+            this.networkInterfaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -122,10 +123,11 @@ namespace KobberLan
             // 
             this.broadcastToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.otherPlayersJoinedToolStripMenuItem,
-            this.resendBroadcastToolStripMenuItem});
+            this.resendBroadcastToolStripMenuItem,
+            this.networkInterfaceToolStripMenuItem});
             this.broadcastToolStripMenuItem.Name = "broadcastToolStripMenuItem";
-            this.broadcastToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
-            this.broadcastToolStripMenuItem.Text = "Broadcast";
+            this.broadcastToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+            this.broadcastToolStripMenuItem.Text = "Network";
             // 
             // otherPlayersJoinedToolStripMenuItem
             // 
@@ -182,6 +184,13 @@ namespace KobberLan
             this.flowLayoutPanel_SuggestedGames.Size = new System.Drawing.Size(606, 637);
             this.flowLayoutPanel_SuggestedGames.TabIndex = 0;
             // 
+            // networkInterfaceToolStripMenuItem
+            // 
+            this.networkInterfaceToolStripMenuItem.Name = "networkInterfaceToolStripMenuItem";
+            this.networkInterfaceToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.networkInterfaceToolStripMenuItem.Text = "Network Interface";
+            this.networkInterfaceToolStripMenuItem.Click += new System.EventHandler(this.networkInterfaceToolStripMenuItem_Click);
+            // 
             // KobberLan
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -222,6 +231,7 @@ namespace KobberLan
         private System.Windows.Forms.ToolStripMenuItem resendBroadcastToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem networkInterfaceToolStripMenuItem;
     }
 }
 
