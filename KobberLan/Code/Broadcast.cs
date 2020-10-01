@@ -99,6 +99,12 @@ namespace KobberLan.Code
                     //Handle message
                     HandleMessage(ClientRequest, ClientEp);
                 }
+                catch (SocketException socketEx)
+                {
+                    if (threadServerActive == false) { } // Ignore, program shutting down
+                    else
+                        Log.Get().Write("Broadcast serverBroadcast Socket exception: " + socketEx, Log.LogType.Error);
+                }
                 catch(Exception ex)
                 {
                     Log.Get().Write("Broadcast serverBroadcast exception: " + ex, Log.LogType.Error);
@@ -149,9 +155,16 @@ namespace KobberLan.Code
                     Log.Get().Write("Broadcast client received message " + ServerResponse + " from " + broadcastAdress.Address.ToString() + ", sending response");
                     HandleMessage(ServerResponse, broadcastAdress);
                 }
+                catch (SocketException socketEx)
+                {
+                    if (threadServerActive == false) { } // Ignore, program shutting down
+                    else
+                        Log.Get().Write("Broadcast client Socket exception: " + socketEx, Log.LogType.Error);
+                }
                 catch (Exception ex)
                 {
                     Log.Get().Write("Broadcast client exception: " + ex, Log.LogType.Error);
+                    threadClientActive = false;
                 }
             }
         }

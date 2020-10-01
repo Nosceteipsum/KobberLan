@@ -70,7 +70,11 @@ namespace KobberLan.Code
 
                 //Send data size
                 byte[] dataSize = BitConverter.GetBytes(data.Length);
-                stream.Write(dataSize, 0, 4);
+                if(dataSize.Length != sizeof(int))
+                {
+                    Log.Get().Write("Int wrong size", Log.LogType.Error);
+                }
+                stream.Write(dataSize, 0, dataSize.Length);
 
                 //Send data
                 stream.Write(data, 0, data.Length);
@@ -170,7 +174,7 @@ namespace KobberLan.Code
                     s.ReceiveTimeout = 3000;
 
                     //Read first 4 bytes (size of packet)
-                    byte[] dataSizeArray = new byte[4];
+                    byte[] dataSizeArray = new byte[sizeof(int)];
                     s.Receive(dataSizeArray, 0, sizeof(int), SocketFlags.None);
                     int dataSize = Convert.ToInt32(dataSizeArray);
 
