@@ -170,8 +170,8 @@ namespace KobberLan.Code
 
                     //Timeout value
                     var watch = System.Diagnostics.Stopwatch.StartNew();
-                    s.SendTimeout    = 3000;
-                    s.ReceiveTimeout = 3000;
+                    s.SendTimeout    = Convert.ToInt32(ConfigurationManager.AppSettings.Get("CommunicationSocket:SendTimeout"));
+                    s.ReceiveTimeout = Convert.ToInt32(ConfigurationManager.AppSettings.Get("CommunicationSocket:ReceiveTimeout"));
 
                     //Read first 4 bytes (size of packet)
                     byte[] dataSizeArray = new byte[sizeof(int)];
@@ -182,7 +182,7 @@ namespace KobberLan.Code
                     //Handle data from client
                     while (s.Available > 0 && bytesReceived.Count != dataSize)
                     {
-                        if(watch.ElapsedMilliseconds > 5000)
+                        if(watch.ElapsedMilliseconds > Convert.ToInt32(ConfigurationManager.AppSettings.Get("CommunicationSocket:WatchDogTimeOut")))
                         {
                             throw new Exception("Communication server, WatchDog timeout");
                         }
