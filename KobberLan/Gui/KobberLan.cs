@@ -54,20 +54,22 @@ namespace KobberLan
                 SuggestedGame suggestedGame;
                 if(suggestion.type == SuggestionType.Internet)
                     suggestedGame = new SuggestedGameInternetControl(suggestion, this);
-                else if (!String.IsNullOrEmpty(path))
+                else if (ownSuggestions)
                 {
-                    //Already own the game, tell server about it
-                    if(!ownSuggestions)
-                    {
-                        DTO_AlreadyOwnIt alreadyOwnIt = new DTO_AlreadyOwnIt() { address = Helper.GetHostIP(), key = suggestion.key };
-                        communication.ClientSend(alreadyOwnIt, remoteIP);
-                    }
-
                     //Add game as owner
                     suggestedGame = new SuggestedGameOwnerControl(suggestion, path, this, ownSuggestions);
                 }
                 else
+                {
                     suggestedGame = new SuggestedGameControl(suggestion, this);
+                    if(Directory.Exists(Helper.GetDirection() + "\\" + suggestion.key))
+                    {
+                        //Already own the game, tell server about it
+                        DTO_AlreadyOwnIt alreadyOwnIt = new DTO_AlreadyOwnIt() { address = Helper.GetHostIP(), key = suggestion.key };
+                        communication.ClientSend(alreadyOwnIt, remoteIP);
+                    }
+                }
+                    
 
                 flowLayoutPanel_SuggestedGames.Controls.Add(suggestedGame);
                 suggestedGames.Add(suggestedGame);
