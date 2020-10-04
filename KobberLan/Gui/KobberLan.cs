@@ -75,7 +75,7 @@ namespace KobberLan
             else 
             {
                 //Warning, tried to add already exisiting game
-                Log.Get().Write("Game " + suggestion.key + " already exist", Log.LogType.Warning);
+                Log.Get().Write("Game " + suggestion.key + " already exist. Note this would happen if BroadCast is active, all player gets suggested game again.", Log.LogType.Info);
             }
         }
 

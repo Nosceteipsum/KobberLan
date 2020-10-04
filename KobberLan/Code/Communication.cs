@@ -180,7 +180,7 @@ namespace KobberLan.Code
                     Log.Get().Write("Communication server got size packet from client. datasize: " + dataSize);
 
                     //Handle data from client
-                    while (s.Available > 0 && bytesReceived.Count != dataSize)
+                    while (bytesReceived.Count != dataSize)
                     {
                         if(watch.ElapsedMilliseconds > Convert.ToInt32(ConfigurationManager.AppSettings.Get("CommunicationSocket:WatchDogTimeOut")))
                         {
