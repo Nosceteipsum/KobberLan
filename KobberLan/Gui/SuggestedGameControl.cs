@@ -252,5 +252,16 @@ namespace KobberLan
                 label_GameTitle.Font = font;
             }
         }
+
+        //-------------------------------------------------------------
+        public override void Remove()
+        //-------------------------------------------------------------
+        {
+            dto_suggestion.imageBig.Dispose();
+            dto_suggestion.imageCover.Dispose();
+            pictureBox_Cover.Image.Dispose();
+        }
+
+
     }
 }

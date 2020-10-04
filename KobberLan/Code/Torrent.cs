@@ -356,7 +356,9 @@ namespace KobberLan.Code
                             if (status == false)
                             {
                                 torrentManager.StopAsync();
-                                Log.Get().Write("TorrentHandler failed", Log.LogType.Error);
+
+                                if(e.NewState != MonoTorrent.Client.TorrentState.Stopped && e.NewState != MonoTorrent.Client.TorrentState.Stopping)
+                                    Log.Get().Write("TorrentHandler failed", Log.LogType.Error);
                             }
 
                         }));
@@ -384,7 +386,9 @@ namespace KobberLan.Code
                                 if(status == false)
                                 {
                                     torrentManager.StopAsync();
-                                    Log.Get().Write("TorrentHandler failed", Log.LogType.Error);
+
+                                    if(torrentManager.State != MonoTorrent.Client.TorrentState.Stopped && torrentManager.State != MonoTorrent.Client.TorrentState.Stopping)
+                                        Log.Get().Write("TorrentHandler failed", Log.LogType.Error);
                                 }
 
                             }));

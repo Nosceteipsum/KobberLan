@@ -133,7 +133,11 @@ namespace KobberLan
             SuggestedGame suggestedGameControl = suggestedGames.Where(L => L.GetKey().Equals(title)).FirstOrDefault();
             if (suggestedGameControl == null)
             {
-                Log.Get().Write("KobberLan UpdateProgressbar unknown title: " + title, Log.LogType.Error);
+                if(type != MonoTorrent.Client.TorrentState.Stopped && type != MonoTorrent.Client.TorrentState.Stopping)
+                {
+                    Log.Get().Write("KobberLan UpdateProgressbar unknown title: " + title, Log.LogType.Error);
+                }
+
                 return false;
             }
             else
@@ -157,6 +161,9 @@ namespace KobberLan
                 //Remove game
                 if(torrentStatus.status == TorrentStatusType.Remove)
                 {
+                    Torrent.Get().StopSharing(torrentStatus.key);
+                    suggestedGameControl.Remove();
+                    suggestedGameControl.Dispose();
                     suggestedGames.Remove(suggestedGameControl);
                     flowLayoutPanel_SuggestedGames.Controls.Remove(suggestedGameControl);
                 }
