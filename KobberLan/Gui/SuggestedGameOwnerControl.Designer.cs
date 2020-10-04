@@ -144,7 +144,7 @@
             this.label_Peers.Name = "label_Peers";
             this.label_Peers.Size = new System.Drawing.Size(29, 16);
             this.label_Peers.TabIndex = 10;
-            this.label_Peers.Text = "00";
+            this.label_Peers.Text = "01";
             this.label_Peers.Visible = false;
             // 
             // pictureBox_Peers
