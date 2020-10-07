@@ -117,7 +117,6 @@
             this.label_Peers.Size = new System.Drawing.Size(29, 16);
             this.label_Peers.TabIndex = 10;
             this.label_Peers.Text = "01";
-            this.label_Peers.Visible = false;
             // 
             // progressBar
             // 
@@ -207,7 +206,6 @@
             this.pictureBox_Peers.Size = new System.Drawing.Size(16, 16);
             this.pictureBox_Peers.TabIndex = 9;
             this.pictureBox_Peers.TabStop = false;
-            this.pictureBox_Peers.Visible = false;
             // 
             // pictureBox_Downloaded
             // 

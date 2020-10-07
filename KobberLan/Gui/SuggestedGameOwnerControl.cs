@@ -195,9 +195,7 @@ namespace KobberLan
             //-------------------------------------------------------------
             //Change layout
             //-------------------------------------------------------------
-            label_Peers.Visible = true;
             label_Downloading.Visible = true;
-            pictureBox_Peers.Visible = true;
             pictureBox_Downloaded.Visible = true;
 
             //-------------------------------------------------------------
