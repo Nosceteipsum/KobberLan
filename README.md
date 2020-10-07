@@ -1,7 +1,7 @@
 # KobberLan
 Lan Party Tool.  
 Make it easy to suggest, share and start games in a LocalAreaNetwork.  
-Uses UDP broadcast to find all computers using KobberLan and make it easy to organize an oldschool Lan party.  
+Uses UDP broadcast to find all computers and make it easy to organize an oldschool Lan party.  
 
 # Images
 ![Title_Image](http://logicwork.net/images/github/KobberLan01.png)  
