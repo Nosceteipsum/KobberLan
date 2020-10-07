@@ -37,8 +37,13 @@
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.label_ProgressBar = new System.Windows.Forms.Label();
             this.button_Play = new System.Windows.Forms.Button();
+            this.panel_Ingame = new System.Windows.Forms.Panel();
+            this.label_Ingame = new System.Windows.Forms.Label();
+            this.pictureBox_Ingame = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Cover)).BeginInit();
+            this.panel_Ingame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Ingame)).BeginInit();
             this.SuspendLayout();
             // 
             // label_GameTitle
@@ -146,10 +151,43 @@
             this.button_Play.Visible = false;
             this.button_Play.Click += new System.EventHandler(this.button_Play_Click);
             // 
+            // panel_Ingame
+            // 
+            this.panel_Ingame.Controls.Add(this.label_Ingame);
+            this.panel_Ingame.Controls.Add(this.pictureBox_Ingame);
+            this.panel_Ingame.Location = new System.Drawing.Point(133, 212);
+            this.panel_Ingame.Name = "panel_Ingame";
+            this.panel_Ingame.Size = new System.Drawing.Size(69, 32);
+            this.panel_Ingame.TabIndex = 18;
+            this.panel_Ingame.Visible = false;
+            // 
+            // label_Ingame
+            // 
+            this.label_Ingame.BackColor = System.Drawing.Color.Transparent;
+            this.label_Ingame.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Ingame.Location = new System.Drawing.Point(36, 9);
+            this.label_Ingame.Name = "label_Ingame";
+            this.label_Ingame.Size = new System.Drawing.Size(29, 16);
+            this.label_Ingame.TabIndex = 16;
+            this.label_Ingame.Text = "00";
+            this.label_Ingame.Visible = false;
+            // 
+            // pictureBox_Ingame
+            // 
+            this.pictureBox_Ingame.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox_Ingame.Image = global::KobberLan.Properties.Resources._16x16;
+            this.pictureBox_Ingame.Location = new System.Drawing.Point(14, 9);
+            this.pictureBox_Ingame.Name = "pictureBox_Ingame";
+            this.pictureBox_Ingame.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox_Ingame.TabIndex = 15;
+            this.pictureBox_Ingame.TabStop = false;
+            this.pictureBox_Ingame.Visible = false;
+            // 
             // SuggestedGameControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.panel_Ingame);
             this.Controls.Add(this.button_Play);
             this.Controls.Add(this.label_ProgressBar);
             this.Controls.Add(this.progressBar);
@@ -163,6 +201,8 @@
             this.Size = new System.Drawing.Size(205, 314);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Cover)).EndInit();
+            this.panel_Ingame.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Ingame)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -178,5 +218,8 @@
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label label_ProgressBar;
         private System.Windows.Forms.Button button_Play;
+        private System.Windows.Forms.Panel panel_Ingame;
+        private System.Windows.Forms.Label label_Ingame;
+        private System.Windows.Forms.PictureBox pictureBox_Ingame;
     }
 }

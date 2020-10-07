@@ -23,6 +23,10 @@ namespace KobberLan.Gui
     {
         protected DTO_Suggestion dto_suggestion;
         protected List<IPAddress> Likes;
+        protected KobberLan kobberLan;
+
+        private Process process;
+        private string process_key;
 
         //-------------------------------------------------------------
         public DTO_Suggestion GetSuggestion()
@@ -53,6 +57,10 @@ namespace KobberLan.Gui
         //-------------------------------------------------------------
 
         //-------------------------------------------------------------
+        public abstract void UpdateGameStatus(DTO_GameStatus gameStatus);
+        //-------------------------------------------------------------
+
+        //-------------------------------------------------------------
         public abstract void Remove();
         //-------------------------------------------------------------
         //-------------------------------------------------------------
@@ -67,22 +75,37 @@ namespace KobberLan.Gui
         //-------------------------------------------------------------
 
         //-------------------------------------------------------------
-        public void ExecuteFile(string filename,string directory,string arguments = "")
+        public void ExecuteFile(string filename,string directory,string arguments,string key)
         //-------------------------------------------------------------
         {
             try
             {
-                Process p = new Process();
-                p.StartInfo.FileName = filename;
-                p.StartInfo.Arguments = arguments;
-                p.StartInfo.WorkingDirectory = directory;
-                p.Start();
+                //Client start the game
+                kobberLan.SendGameStatus(new DTO_GameStatus() { key = key, playing = true, address = Helper.GetHostIP()});
+                process_key = key;
+
+                //Start game process
+                process = new Process();
+                process.EnableRaisingEvents = true;
+                process.Exited += new EventHandler(ProcessExited); 
+                process.StartInfo.FileName = filename;
+                process.StartInfo.Arguments = arguments;
+                process.StartInfo.WorkingDirectory = directory;
+                process.Start();
             }
             catch(Exception ex)
             {
                 Log.Get().Write("Failed to start game: " + directory + "\\" + filename + " exception: " + ex, Log.LogType.Error);
                 MessageBox.Show(this, "Failed to start game: " + filename + " exception: " + ex,"Error");
             }
+        }
+
+        //-------------------------------------------------------------
+        internal void ProcessExited(object sender, System.EventArgs e)
+        //-------------------------------------------------------------
+        {
+            //Client stop the game
+            kobberLan.SendGameStatus(new DTO_GameStatus() { key = process_key, playing = false, address = Helper.GetHostIP()});
         }
 
         //-------------------------------------------------------------

@@ -33,19 +33,24 @@
             this.button_ShareGet = new System.Windows.Forms.Button();
             this.label_likes = new System.Windows.Forms.Label();
             this.label_Downloading = new System.Windows.Forms.Label();
-            this.pictureBox_Downloaded = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox_Cover = new System.Windows.Forms.PictureBox();
             this.label_Peers = new System.Windows.Forms.Label();
-            this.pictureBox_Peers = new System.Windows.Forms.PictureBox();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.label_ProgresBar = new System.Windows.Forms.Label();
             this.button_Play = new System.Windows.Forms.Button();
             this.button_Clear = new System.Windows.Forms.Button();
+            this.label_Ingame = new System.Windows.Forms.Label();
+            this.panel_Ingame = new System.Windows.Forms.Panel();
+            this.pictureBox_Ingame = new System.Windows.Forms.PictureBox();
+            this.pictureBox_Peers = new System.Windows.Forms.PictureBox();
+            this.pictureBox_Downloaded = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_Cover = new System.Windows.Forms.PictureBox();
+            this.panel_Ingame.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Ingame)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Peers)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Downloaded)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Cover)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Peers)).BeginInit();
             this.SuspendLayout();
             // 
             // label_GameTitle
@@ -104,39 +109,6 @@
             this.label_Downloading.Text = "00 / 00";
             this.label_Downloading.Visible = false;
             // 
-            // pictureBox_Downloaded
-            // 
-            this.pictureBox_Downloaded.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox_Downloaded.Image = global::KobberLan.Properties.Resources.Floppy;
-            this.pictureBox_Downloaded.Location = new System.Drawing.Point(65, 255);
-            this.pictureBox_Downloaded.Name = "pictureBox_Downloaded";
-            this.pictureBox_Downloaded.Size = new System.Drawing.Size(21, 16);
-            this.pictureBox_Downloaded.TabIndex = 7;
-            this.pictureBox_Downloaded.TabStop = false;
-            this.pictureBox_Downloaded.Visible = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox2.Image = global::KobberLan.Properties.Resources.ThumbsUp;
-            this.pictureBox2.Location = new System.Drawing.Point(7, 254);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox2.TabIndex = 5;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox_Cover
-            // 
-            this.pictureBox_Cover.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox_Cover.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.pictureBox_Cover.Location = new System.Drawing.Point(6, 44);
-            this.pictureBox_Cover.Name = "pictureBox_Cover";
-            this.pictureBox_Cover.Size = new System.Drawing.Size(196, 200);
-            this.pictureBox_Cover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox_Cover.TabIndex = 0;
-            this.pictureBox_Cover.TabStop = false;
-            // 
             // label_Peers
             // 
             this.label_Peers.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -146,17 +118,6 @@
             this.label_Peers.TabIndex = 10;
             this.label_Peers.Text = "01";
             this.label_Peers.Visible = false;
-            // 
-            // pictureBox_Peers
-            // 
-            this.pictureBox_Peers.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureBox_Peers.Image = global::KobberLan.Properties.Resources.Person;
-            this.pictureBox_Peers.Location = new System.Drawing.Point(160, 255);
-            this.pictureBox_Peers.Name = "pictureBox_Peers";
-            this.pictureBox_Peers.Size = new System.Drawing.Size(16, 16);
-            this.pictureBox_Peers.TabIndex = 9;
-            this.pictureBox_Peers.TabStop = false;
-            this.pictureBox_Peers.Visible = false;
             // 
             // progressBar
             // 
@@ -205,10 +166,87 @@
             this.button_Clear.UseVisualStyleBackColor = true;
             this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
             // 
+            // label_Ingame
+            // 
+            this.label_Ingame.BackColor = System.Drawing.Color.Transparent;
+            this.label_Ingame.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_Ingame.Location = new System.Drawing.Point(36, 9);
+            this.label_Ingame.Name = "label_Ingame";
+            this.label_Ingame.Size = new System.Drawing.Size(29, 16);
+            this.label_Ingame.TabIndex = 16;
+            this.label_Ingame.Text = "00";
+            this.label_Ingame.Visible = false;
+            // 
+            // panel_Ingame
+            // 
+            this.panel_Ingame.Controls.Add(this.label_Ingame);
+            this.panel_Ingame.Controls.Add(this.pictureBox_Ingame);
+            this.panel_Ingame.Location = new System.Drawing.Point(136, 221);
+            this.panel_Ingame.Name = "panel_Ingame";
+            this.panel_Ingame.Size = new System.Drawing.Size(69, 32);
+            this.panel_Ingame.TabIndex = 17;
+            this.panel_Ingame.Visible = false;
+            // 
+            // pictureBox_Ingame
+            // 
+            this.pictureBox_Ingame.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox_Ingame.Image = global::KobberLan.Properties.Resources._16x16;
+            this.pictureBox_Ingame.Location = new System.Drawing.Point(14, 9);
+            this.pictureBox_Ingame.Name = "pictureBox_Ingame";
+            this.pictureBox_Ingame.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox_Ingame.TabIndex = 15;
+            this.pictureBox_Ingame.TabStop = false;
+            this.pictureBox_Ingame.Visible = false;
+            // 
+            // pictureBox_Peers
+            // 
+            this.pictureBox_Peers.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBox_Peers.Image = global::KobberLan.Properties.Resources.Person;
+            this.pictureBox_Peers.Location = new System.Drawing.Point(160, 255);
+            this.pictureBox_Peers.Name = "pictureBox_Peers";
+            this.pictureBox_Peers.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox_Peers.TabIndex = 9;
+            this.pictureBox_Peers.TabStop = false;
+            this.pictureBox_Peers.Visible = false;
+            // 
+            // pictureBox_Downloaded
+            // 
+            this.pictureBox_Downloaded.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBox_Downloaded.Image = global::KobberLan.Properties.Resources.Floppy;
+            this.pictureBox_Downloaded.Location = new System.Drawing.Point(65, 255);
+            this.pictureBox_Downloaded.Name = "pictureBox_Downloaded";
+            this.pictureBox_Downloaded.Size = new System.Drawing.Size(21, 16);
+            this.pictureBox_Downloaded.TabIndex = 7;
+            this.pictureBox_Downloaded.TabStop = false;
+            this.pictureBox_Downloaded.Visible = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBox2.Image = global::KobberLan.Properties.Resources.ThumbsUp;
+            this.pictureBox2.Location = new System.Drawing.Point(7, 254);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox2.TabIndex = 5;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox_Cover
+            // 
+            this.pictureBox_Cover.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox_Cover.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictureBox_Cover.Location = new System.Drawing.Point(6, 44);
+            this.pictureBox_Cover.Name = "pictureBox_Cover";
+            this.pictureBox_Cover.Size = new System.Drawing.Size(196, 200);
+            this.pictureBox_Cover.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_Cover.TabIndex = 0;
+            this.pictureBox_Cover.TabStop = false;
+            // 
             // SuggestedGameOwnerControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.panel_Ingame);
             this.Controls.Add(this.button_Clear);
             this.Controls.Add(this.button_Play);
             this.Controls.Add(this.label_ProgresBar);
@@ -225,10 +263,12 @@
             this.Controls.Add(this.pictureBox_Cover);
             this.Name = "SuggestedGameOwnerControl";
             this.Size = new System.Drawing.Size(205, 314);
+            this.panel_Ingame.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Ingame)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Peers)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Downloaded)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Cover)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Peers)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -249,5 +289,8 @@
         private System.Windows.Forms.Label label_ProgresBar;
         private System.Windows.Forms.Button button_Play;
         private System.Windows.Forms.Button button_Clear;
+        private System.Windows.Forms.Label label_Ingame;
+        private System.Windows.Forms.PictureBox pictureBox_Ingame;
+        private System.Windows.Forms.Panel panel_Ingame;
     }
 }

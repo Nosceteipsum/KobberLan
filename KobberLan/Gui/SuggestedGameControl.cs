@@ -17,9 +17,9 @@ namespace KobberLan
     public partial class SuggestedGameControl : SuggestedGame
     //-------------------------------------------------------------
     {
-        private KobberLan kobberLan;
         private TorrentState state;
         private bool finishedDownloaded;
+        private int ingame;
 
         //-------------------------------------------------------------
         public SuggestedGameControl(DTO_Suggestion dto, KobberLan parent)
@@ -235,11 +235,43 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
+        public override void UpdateGameStatus(DTO_GameStatus gameStatus)
+        //-------------------------------------------------------------
+        {
+            //Update amount
+            if(gameStatus.playing == true)
+            {
+                ingame++;
+            }
+            else
+            {
+                ingame--;
+            }
+
+            //Update amount of players in label
+            label_Ingame.Text = ingame.ToString("D2");
+
+            //Show/hide ingame info
+            if(ingame > 0)
+            {
+                panel_Ingame.Visible = true;
+                pictureBox_Ingame.Visible = true;
+                label_Ingame.Visible = true;
+            }
+            else
+            {
+                panel_Ingame.Visible = false;
+                pictureBox_Ingame.Visible = false;
+                label_Ingame.Visible = false;
+            }
+        }
+
+        //-------------------------------------------------------------
         private void button_Play_Click(object sender, EventArgs e)
         //-------------------------------------------------------------
         {
             var path = Helper.GetDirection();
-            ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams);
+            ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams, dto_suggestion.key);
         }
 
         //-------------------------------------------------------------

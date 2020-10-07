@@ -17,7 +17,6 @@ namespace KobberLan
     public partial class SuggestedGameInternetControl : SuggestedGame
     //-------------------------------------------------------------
     {
-        private KobberLan kobberLan;
 
         //-------------------------------------------------------------
         public SuggestedGameInternetControl(DTO_Suggestion dto, KobberLan parent)
@@ -79,6 +78,10 @@ namespace KobberLan
 
         //-------------------------------------------------------------
         public override void UpdateTorrent(DTO_Torrent torrent) { }
+        //-------------------------------------------------------------
+
+        //-------------------------------------------------------------
+        public override void UpdateGameStatus(DTO_GameStatus gameStatus) { }
         //-------------------------------------------------------------
 
         //-------------------------------------------------------------

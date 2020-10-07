@@ -118,31 +118,34 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ThumbsUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ThumbsUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Floppy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Floppy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="paypal-donate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\paypal-donate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="OpenClosedDot_grey" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OpenClosedDot_grey.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="OpenClosedDot_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\OpenClosedDot_red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="OpenClosedDot_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\OpenClosedDot_green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="paypal-donate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\paypal-donate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="no_cover" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\no-cover.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="bitcoin_donate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bitcoin_donate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Floppy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Floppy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Person" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Person.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ThumbsUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ThumbsUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OpenClosedDot_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\OpenClosedDot_green.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="no_cover" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\no-cover.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="16x16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\16x16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

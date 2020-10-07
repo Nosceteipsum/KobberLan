@@ -107,6 +107,18 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
+        public void SendGameStatus(DTO_GameStatus gameStatus)
+        //-------------------------------------------------------------
+        {
+            //Send packet to LAN
+            Log.Get().Write("Communication client prepare to send GameStatus");
+            communication.ClientSend(gameStatus);
+
+            //Update own GUI with like
+            GotGameStatus(gameStatus);
+        }
+
+        //-------------------------------------------------------------
         public void SendTorrent(DTO_Torrent torrent)
         //-------------------------------------------------------------
         {
@@ -146,6 +158,21 @@ namespace KobberLan
             {
                 suggestedGameControl.UpdateProgressBar(type, progress);
                 return true;
+            }
+        }
+
+        //-------------------------------------------------------------
+        public void GotGameStatus(DTO_GameStatus gameStatus)
+        //-------------------------------------------------------------
+        {
+            SuggestedGame suggestedGameControl = suggestedGames.Where(L => L.GetKey().Equals(gameStatus.key)).FirstOrDefault();
+            if(suggestedGameControl == null)
+            {
+                Log.Get().Write("KobberLan DTO_GameStatus unknown title: " + gameStatus.key, Log.LogType.Error);
+            }
+            else
+            {
+                suggestedGameControl.UpdateGameStatus(gameStatus);
             }
         }
 

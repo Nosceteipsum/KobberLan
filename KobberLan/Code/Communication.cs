@@ -267,6 +267,15 @@ namespace KobberLan.Code
                     kobberLanGui.GotTorrentStatus(torrent);
                 }));
             }
+            else if (dataObject.GetType() == typeof(DTO_GameStatus))
+            {
+                DTO_GameStatus gameStatus = (DTO_GameStatus)dataObject;
+                Log.Get().Write("Communication server handle gameStatus: " + gameStatus.key);
+                kobberLanGui.Invoke(new Action(() =>
+                {
+                    kobberLanGui.GotGameStatus(gameStatus);
+                }));
+            }
             else
             {
                 Log.Get().Write("Communication server got unknown message", Log.LogType.Warning);

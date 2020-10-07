@@ -78,6 +78,7 @@
     <Compile Include="Code\Broadcast.cs" />
     <Compile Include="Code\Communication.cs" />
     <Compile Include="Code\DTO_AlreadyOwnIt.cs" />
+    <Compile Include="Code\DTO_GameStatus.cs" />
     <Compile Include="Code\DTO_SuggestionInternet.cs" />
     <Compile Include="Code\DTO_SuggestionSettings.cs" />
     <Compile Include="Code\DTO_TorrentStatus.cs" />
@@ -229,6 +230,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\16x16.png" />
     <None Include="Resources\ThumbsUp.png" />
     <None Include="Resources\Person.png" />
     <None Include="Resources\Floppy.png" />

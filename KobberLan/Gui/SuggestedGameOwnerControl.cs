@@ -17,7 +17,6 @@ namespace KobberLan
     //-------------------------------------------------------------
     {
         private string path;
-        private KobberLan kobberLan;
 
         private TorrentState state;
         private int metaProgress;
@@ -27,6 +26,7 @@ namespace KobberLan
         private int torrentDownloadStarted;
 
         private bool ownSuggestions;
+        private int ingame;
 
         //-------------------------------------------------------------
         public SuggestedGameOwnerControl(DTO_Suggestion dto, string pathHDD, KobberLan parent, bool ownSuggestions = false)
@@ -39,6 +39,7 @@ namespace KobberLan
             torrentDownloadCompleted = 0;
             torrentDownloadStarted = 0;
 
+            ingame = 0;
             metaProgress = 0;
             state = TorrentState.Starting;
             kobberLan = parent;
@@ -294,13 +295,45 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
+        public override void UpdateGameStatus(DTO_GameStatus gameStatus)
+        //-------------------------------------------------------------
+        {
+            //Update amount
+            if(gameStatus.playing == true)
+            {
+                ingame++;
+            }
+            else
+            {
+                ingame--;
+            }
+
+            //Update amount of players in label
+            label_Ingame.Text = ingame.ToString("D2");
+
+            //Show/hide ingame info
+            if(ingame > 0)
+            {
+                panel_Ingame.Visible = true;
+                pictureBox_Ingame.Visible = true;
+                label_Ingame.Visible = true;
+            }
+            else
+            {
+                panel_Ingame.Visible = false;
+                pictureBox_Ingame.Visible = false;
+                label_Ingame.Visible = false;
+            }
+        }
+
+        //-------------------------------------------------------------
         private void button_Play_Click(object sender, EventArgs e)
         //-------------------------------------------------------------
         {
             if(string.IsNullOrEmpty(dto_suggestion.startServer))
             {
                 var path = Helper.GetDirection();
-                ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams);
+                ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams, dto_suggestion.key);
             }
             else
             {
@@ -311,12 +344,12 @@ namespace KobberLan
                 if(result == DialogResult.Yes)
                 {
                     var path = Helper.GetDirection();
-                    ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams);
+                    ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams, dto_suggestion.key);
                 }
                 else if (result == DialogResult.No)
                 {
                     var path = Helper.GetDirection();
-                    ExecuteFile(dto_suggestion.startServer, path + "\\Games\\" + dto_suggestion.key, dto_suggestion.startServerParams);
+                    ExecuteFile(dto_suggestion.startServer, path + "\\Games\\" + dto_suggestion.key, dto_suggestion.startServerParams, dto_suggestion.key);
                 }
                 else
                 {
@@ -353,6 +386,7 @@ namespace KobberLan
             dto_suggestion.imageCover.Dispose();
             pictureBox_Cover.Image.Dispose();
         }
+
     }
 
 
