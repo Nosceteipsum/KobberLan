@@ -41,7 +41,7 @@ namespace KobberLan
                 button_Get.Enabled = false;
                 button_Get.Visible = false;
             }
-            else
+            else //Internet suggestion
             {
                 button_Get.Enabled = true;
                 button_Get.Visible = true;

@@ -28,6 +28,9 @@ namespace KobberLan
         private bool ownSuggestions;
         private int ingame;
 
+        private DTO_Torrent torrent;
+        private bool torrentShared;
+
         //-------------------------------------------------------------
         public SuggestedGameOwnerControl(DTO_Suggestion dto, string pathHDD, KobberLan parent, bool ownSuggestions = false)
         //-------------------------------------------------------------
@@ -53,6 +56,7 @@ namespace KobberLan
             CustomToolTip tip = new CustomToolTip(dto, this);
             tip.InitImage(dto.imageBig);
             tip.SetToolTip(pictureBox_Cover, "Details");
+            torrentShared = false;
 
             //Check for startup value
             if (!(string.IsNullOrEmpty(dto.startGame) && string.IsNullOrEmpty(dto.startServer)))
@@ -124,6 +128,15 @@ namespace KobberLan
 
                 //Stop sharing enabled
                 button_ShareGet.Enabled = true;
+
+                //-------------------------------------------------------------
+                //Allow clients to download
+                //-------------------------------------------------------------
+                if(torrentShared == false)
+                {
+                    torrentShared = true;
+                    kobberLan.SendTorrent(torrent);
+                }
             }
             else if(type == TorrentState.Metadata)
             {
@@ -220,7 +233,7 @@ namespace KobberLan
                 //-------------------------------------------------------------
                 new Thread(() =>
                 {
-                    DTO_Torrent torrent = new DTO_Torrent() { key = dto_suggestion.key }; 
+                    torrent = new DTO_Torrent() { key = dto_suggestion.key }; 
 
                     //-------------------------------------------------------------
                     //Start creating torrent (hashing)
@@ -256,11 +269,6 @@ namespace KobberLan
                     //Insert announce ip
                     //-------------------------------------------------------------
                     torrent.torrent = Torrent.Get().InsertAnnounce(torrent.torrent);
-
-                    //-------------------------------------------------------------
-                    //Share the torrent with other
-                    //-------------------------------------------------------------
-                    kobberLan.SendTorrent(torrent);
 
                     //-------------------------------------------------------------
                     //Start tracker

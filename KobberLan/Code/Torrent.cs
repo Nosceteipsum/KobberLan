@@ -339,7 +339,7 @@ namespace KobberLan.Code
                 TorrentManager torrentManager = new TorrentManager(torrent, path, torrentSettings);
 
                 //Add logning
-                torrentManager.ConnectionAttemptFailed += delegate (object o, ConnectionAttemptFailedEventArgs e) { Log.Get().Write("TorrentManager connectionAttemptFailed", Log.LogType.Error); };
+                torrentManager.ConnectionAttemptFailed += delegate (object o, ConnectionAttemptFailedEventArgs e) { Log.Get().Write("TorrentManager connectionAttemptFailed reason:" + e.Reason.ToString(), Log.LogType.Error); };
                 torrentManager.PeerConnected += delegate (object o, PeerConnectedEventArgs e) { Log.Get().Write("TorrentManager PeerConnected"); };
                 torrentManager.PeerDisconnected += delegate (object o, PeerDisconnectedEventArgs e) { Log.Get().Write("TorrentManager PeerDisconnected"); };
                 torrentManager.PeersFound += delegate (object o, PeersAddedEventArgs e) { Log.Get().Write("TorrentManager PeersAdded"); };
