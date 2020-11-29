@@ -181,8 +181,13 @@ namespace KobberLan
         public override void UpdateTorrent(DTO_Torrent torrent)
         //-------------------------------------------------------------
         {
-            button_Get.Visible = true;
-            button_Get.Enabled = true;
+            //Enable GET button if client don't has the game
+            if(button_Play.Enabled == false)
+            {
+                button_Get.Visible = true;
+                button_Get.Enabled = true;
+            }
+
             dto_suggestion.torrent = torrent.torrent;
         }
 
