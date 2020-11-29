@@ -70,7 +70,7 @@ namespace KobberLan.Code
 
                 //Send data size
                 byte[] dataSize = BitConverter.GetBytes(data.Length);
-                if(dataSize.Length != sizeof(int))
+                if (dataSize.Length != sizeof(int))
                 {
                     Log.Get().Write("Int wrong size", Log.LogType.Error);
                 }
@@ -82,6 +82,19 @@ namespace KobberLan.Code
                 stream.Close();
                 communicationClient.Close();
                 return true;
+            }
+            catch (SocketException ex)
+            {
+                if(ex.SocketErrorCode.Equals("ConnectionRefused") ||
+                   ex.SocketErrorCode.Equals("TimedOut"))
+                {
+                    Log.Get().Write("Communication client Socketexception: " + ex, Log.LogType.Warning);
+                }
+                else
+                {
+                    Log.Get().Write("Communication client Socketexception: " + ex, Log.LogType.Error);
+                }
+                return false;
             }
             catch (Exception ex)
             {
