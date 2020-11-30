@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -30,7 +31,7 @@ namespace KobberLan.Code
 
         private KobberLan kobberLanGui;
 
-        private List<IPAddress> playersFound;
+        private SynchronizedCollection<IPAddress> playersFound;
 
         private readonly object syncLock = new object();
 
@@ -41,7 +42,7 @@ namespace KobberLan.Code
             //Read port from ApplicationConfig
             BROADCAST_PORT = Convert.ToInt32( ConfigurationManager.AppSettings.Get("Port:BroadcastUDP") );
 
-            playersFound = new List<IPAddress>();
+            playersFound = new SynchronizedCollection<IPAddress>();
             kobberLanGui = gui;
 
             Log.Get().Write("Broadcast own IP: " + Helper.GetHostIP() );

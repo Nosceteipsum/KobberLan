@@ -1,6 +1,7 @@
 using KobberLan.Code;
 using KobberLan.Gui;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -249,7 +250,7 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
-        public void UpdatePlayersAmount(List<IPAddress> players)
+        public void UpdatePlayersAmount(SynchronizedCollection<IPAddress> players)
         //-------------------------------------------------------------
         {
             otherPlayersJoinedToolStripMenuItem.Text = "Other players joined: " + players.Count.ToString("D2");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace KobberLan.Code
     {
         public static int COMMUNICATION_PORT;
 
-        private List<IPAddress> playerList;
+        private SynchronizedCollection<IPAddress> playerList;
 
         private Thread threadServer;
         private bool threadServerActive;
@@ -25,12 +26,26 @@ namespace KobberLan.Code
         private TcpListener communicationServer = null;
         private TcpClient communicationClient = null;
 
+        private CancellationTokenSource threadClient;
+
         private KobberLan kobberLanGui;
+
+        private BlockingCollection<QueueNetwork> queueNetwork;
+
+        //-------------------------------------------------------------
+        private class QueueNetwork
+        //-------------------------------------------------------------
+        {
+            public object DTO;
+            public string IP;
+        }
 
         //-------------------------------------------------------------
         public Communication(KobberLan gui)
         //-------------------------------------------------------------
         {
+            queueNetwork = new BlockingCollection<QueueNetwork>();
+
             //Read port from ApplicationConfig
             COMMUNICATION_PORT = Convert.ToInt32(ConfigurationManager.AppSettings.Get("Port:CommunicationTCP"));
 
@@ -38,7 +53,7 @@ namespace KobberLan.Code
         }
 
         //-------------------------------------------------------------
-        public void SetPlayers(List<IPAddress> players)
+        public void SetPlayers(SynchronizedCollection<IPAddress> players)
         //-------------------------------------------------------------
         {
             playerList = players;
@@ -53,18 +68,24 @@ namespace KobberLan.Code
             threadServer = new Thread(new ThreadStart(ServerListen));
             threadServerActive = true;
             threadServer.Start();
+
+            //Start client thread
+            Log.Get().Write("Communication starting client thread");
+            threadClient = new CancellationTokenSource();
+            var task = Task.Run(() => ThreadClientSend(threadClient.Token), threadClient.Token);
         }
 
         //-------------------------------------------------------------
-        private bool ClientSendData(byte[] data, string IP)
+        private async Task<bool> ClientSendData(byte[] data, string IP, IPAddress player)
         //-------------------------------------------------------------
         {
             Log.Get().Write("Communication client sending to: " + IP + ", size: " + data.Length);
+            if(player == null)player = playerList.SingleOrDefault(p => p.ToString().Equals(IP));
 
             try
             {
                 communicationClient = new TcpClient();
-                communicationClient.Connect(IP, COMMUNICATION_PORT);
+                await communicationClient.ConnectAsync(IP, COMMUNICATION_PORT);
 
                 var stream = communicationClient.GetStream();
 
@@ -74,10 +95,10 @@ namespace KobberLan.Code
                 {
                     Log.Get().Write("Int wrong size", Log.LogType.Error);
                 }
-                stream.Write(dataSize, 0, dataSize.Length);
+                await stream.WriteAsync(dataSize, 0, dataSize.Length);
 
                 //Send data
-                stream.Write(data, 0, data.Length);
+                await stream.WriteAsync(data, 0, data.Length);
 
                 stream.Close();
                 communicationClient.Close();
@@ -94,10 +115,22 @@ namespace KobberLan.Code
                 {
                     Log.Get().Write("Communication client Socketexception: " + ex, Log.LogType.Error);
                 }
+
+                Log.Get().Write("Removing " + player?.ToString() + " client from list", Log.LogType.Warning);
+                if(player != null)
+                {
+                    playerList.Remove(player); //Failed to send to client, remove from list
+                }
+
                 return false;
             }
             catch (Exception ex)
             {
+                Log.Get().Write("Removing " + player?.ToString() + " client from list", Log.LogType.Warning);
+                if (player != null)
+                {
+                    playerList.Remove(player); //Failed to send to client, remove from list
+                }
                 Log.Get().Write("Communication client exception: " + ex, Log.LogType.Error);
                 return false;
             }
@@ -113,31 +146,46 @@ namespace KobberLan.Code
                 return;
             }
 
-            Log.Get().Write("Communication client prepare data");
-            byte[] data = Helper.ObjectToByteArray(DTO);
+            queueNetwork.Add(new QueueNetwork() {DTO = DTO, IP = IP });
+        }
 
-            if (String.IsNullOrEmpty(IP))
+        //-------------------------------------------------------------
+        private void ThreadClientSend(CancellationToken token)
+        //-------------------------------------------------------------
+        {
+            Log.Get().Write("Starting Client Thread");
+
+            while(!token.IsCancellationRequested)
             {
-                //Send packet to all known players
-                List<IPAddress> playerRemoveList = new List<IPAddress>();
-                foreach (IPAddress player in playerList)
+                if(queueNetwork.Count > 0)
                 {
-                    Log.Get().Write("Communication send DTO to client: " + IP);
-                    if (false == ClientSendData(data, player.ToString()))
+                    QueueNetwork packet = queueNetwork.Take();
+
+                    Log.Get().Write("Communication client prepare data");
+                    byte[] data = Helper.ObjectToByteArray(packet.DTO);
+
+                    if (String.IsNullOrEmpty(packet.IP))
                     {
-                        //Failed to send to client, remove from list
-                        Log.Get().Write("Removing " + player.ToString() + " client from list", Log.LogType.Warning);
-                        playerRemoveList.Add(player);
+                        //Send packet to all known players
+                        foreach (IPAddress player in playerList)
+                        {
+                            Log.Get().Write("Communication send DTO to client: " + packet.IP);
+                            ClientSendData(data, player.ToString(), player).Wait();
+                        }
+                    }
+                    else // Specic player only (when rejoining or new player open KobberParty)
+                    {
+                        Log.Get().Write("Communication send DTO to specific client: " + packet.IP);
+                        ClientSendData(data, packet.IP, null).Wait();
                     }
                 }
-                foreach (IPAddress player in playerRemoveList) { playerList.Remove(player); }
-            }
-            else // Specic player only (when rejoining or new player open KobberParty)
-            {
-                Log.Get().Write("Communication send DTO to specific client: " + IP);
-                ClientSendData(data, IP);
+                else
+                {
+                    Thread.Sleep(100);
+                }
             }
 
+            Log.Get().Write("Closing Client Thread");
         }
 
         //-------------------------------------------------------------
@@ -148,6 +196,7 @@ namespace KobberLan.Code
             threadServerActive = false;
             if (communicationServer != null) communicationServer.Stop();
             if (communicationClient != null) communicationClient.Close();
+            threadClient.Cancel();
         }
 
         //-------------------------------------------------------------
