@@ -19,7 +19,7 @@ namespace KobberLan
     {
         private TorrentState state;
         private bool finishedDownloaded;
-        private int ingame;
+        private List<string> ingame = new List<string>();
 
         //-------------------------------------------------------------
         public SuggestedGameControl(DTO_Suggestion dto, KobberLan parent)
@@ -246,18 +246,18 @@ namespace KobberLan
             //Update amount
             if(gameStatus.playing == true)
             {
-                ingame++;
+                if(!ingame.Contains(gameStatus.address.ToString()))ingame.Add(gameStatus.address.ToString());
             }
             else
             {
-                ingame--;
+                ingame.Remove(gameStatus.address.ToString());
             }
 
             //Update amount of players in label
-            label_Ingame.Text = ingame.ToString("D2");
+            label_Ingame.Text = ingame.Count.ToString("D2");
 
             //Show/hide ingame info
-            if(ingame > 0)
+            if(ingame.Count > 0)
             {
                 panel_Ingame.Visible = true;
                 pictureBox_Ingame.Visible = true;

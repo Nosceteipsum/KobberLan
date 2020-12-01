@@ -245,7 +245,7 @@ namespace KobberLan
             }
             else
             {
-                ((SuggestedGameOwnerControl)suggestedGameControl).IncreasePeer();
+                ((SuggestedGameOwnerControl)suggestedGameControl).IncreasePeer(alreadyOwnIt.address.ToString());
             }
         }
 

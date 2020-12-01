@@ -21,12 +21,12 @@ namespace KobberLan
         private TorrentState state;
         private int metaProgress;
 
-        private int torrentPeers;
-        private int torrentDownloadCompleted;
-        private int torrentDownloadStarted;
+        private List<string> torrentPeers;
+        private List<string> torrentDownloadCompleted;
+        private List<string> torrentDownloadStarted;
 
         private bool ownSuggestions;
-        private int ingame;
+        private List<string> ingame;
 
         private DTO_Torrent torrent;
         private bool torrentShared;
@@ -38,11 +38,12 @@ namespace KobberLan
             //Init control 
             InitializeComponent();
 
-            torrentPeers = 1; // Inclusive owner
-            torrentDownloadCompleted = 0;
-            torrentDownloadStarted = 0;
+            torrentPeers = new List<string>();
+            torrentPeers.Add("127.0.0.1"); // Inclusive owner
+            torrentDownloadCompleted = new List<string>();
+            torrentDownloadStarted = new List<string>();
 
-            ingame = 0;
+            ingame = new List<string>();
             metaProgress = 0;
             state = TorrentState.Starting;
             kobberLan = parent;
@@ -89,24 +90,24 @@ namespace KobberLan
         {
             if (torrentStatus.status == TorrentStatusType.Finished)
             {
-                torrentDownloadCompleted++;
-                torrentPeers++;
+                if(!torrentDownloadCompleted.Contains(torrentStatus.address.ToString()))torrentDownloadCompleted.Add(torrentStatus.address.ToString());
+                if(!torrentPeers.Contains(torrentStatus.address.ToString()))torrentPeers.Add(torrentStatus.address.ToString());
             }
             if (torrentStatus.status == TorrentStatusType.Starting)
             {
-                torrentDownloadStarted++;
+                if(!torrentDownloadStarted.Contains(torrentStatus.address.ToString()))torrentDownloadStarted.Add(torrentStatus.address.ToString());
             }
 
-            label_Downloading.Text = torrentDownloadCompleted.ToString("D2") + " / " + torrentDownloadStarted.ToString("D2");
-            label_Peers.Text = torrentPeers.ToString("D2");
+            label_Downloading.Text = torrentDownloadCompleted.Count.ToString("D2") + " / " + torrentDownloadStarted.Count.ToString("D2");
+            label_Peers.Text = torrentPeers.Count.ToString("D2");
         }
 
         //-------------------------------------------------------------
-        public void IncreasePeer()
+        public void IncreasePeer(String ip)
         //-------------------------------------------------------------
         {
-            torrentPeers++;
-            label_Peers.Text = torrentPeers.ToString("D2");
+            if(!torrentPeers.Contains(ip))torrentPeers.Add(ip);
+            label_Peers.Text = torrentPeers.Count.ToString("D2");
         }
 
         //-------------------------------------------------------------
@@ -307,18 +308,18 @@ namespace KobberLan
             //Update amount
             if(gameStatus.playing == true)
             {
-                ingame++;
+                if(!ingame.Contains(gameStatus.address.ToString()))ingame.Add(gameStatus.address.ToString());
             }
             else
             {
-                ingame--;
+                ingame.Remove(gameStatus.address.ToString());
             }
 
             //Update amount of players in label
-            label_Ingame.Text = ingame.ToString("D2");
+            label_Ingame.Text = ingame.Count.ToString("D2");
 
             //Show/hide ingame info
-            if(ingame > 0)
+            if(ingame.Count > 0)
             {
                 panel_Ingame.Visible = true;
                 pictureBox_Ingame.Visible = true;
