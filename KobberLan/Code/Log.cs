@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace KobberLan.Code
 {
@@ -34,6 +30,18 @@ namespace KobberLan.Code
         {
             errors = 0;
             warnings = 0;
+
+            //-------------------------------------------------------------
+            //Rename all old logfiles
+            //-------------------------------------------------------------
+            if (System.IO.File.Exists("Logs\\error.html"))
+                System.IO.File.Move("Logs\\error.html", "Logs\\error" + "_old_" + DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss") + ".html");
+
+            if (System.IO.File.Exists("Logs\\warning.html"))
+                System.IO.File.Move("Logs\\warning.html", "Logs\\warning" + "_old_" + DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss") + ".html");
+
+            if (System.IO.File.Exists("Logs\\info.html"))
+                System.IO.File.Move("Logs\\info.html", "Logs\\info" + "_old_" + DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss") + ".html");
         }
 
         //-------------------------------------------------------------
