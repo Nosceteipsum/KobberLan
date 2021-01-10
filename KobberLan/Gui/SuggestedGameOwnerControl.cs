@@ -305,32 +305,37 @@ namespace KobberLan
         public override void UpdateGameStatus(DTO_GameStatus gameStatus)
         //-------------------------------------------------------------
         {
-            //Update amount
-            if(gameStatus.playing == true)
-            {
-                if(!ingame.Contains(gameStatus.address.ToString()))ingame.Add(gameStatus.address.ToString());
-            }
-            else
-            {
-                ingame.Remove(gameStatus.address.ToString());
-            }
 
-            //Update amount of players in label
-            label_Ingame.Text = ingame.Count.ToString("D2");
+            kobberLan.Invoke(new Action(() =>
+            {
+                //Update amount
+                if(gameStatus.playing == true)
+                {
+                    if(!ingame.Contains(gameStatus.address.ToString()))ingame.Add(gameStatus.address.ToString());
+                }
+                else
+                {
+                    ingame.Remove(gameStatus.address.ToString());
+                }
 
-            //Show/hide ingame info
-            if(ingame.Count > 0)
-            {
-                panel_Ingame.Visible = true;
-                pictureBox_Ingame.Visible = true;
-                label_Ingame.Visible = true;
-            }
-            else
-            {
-                panel_Ingame.Visible = false;
-                pictureBox_Ingame.Visible = false;
-                label_Ingame.Visible = false;
-            }
+                //Update amount of players in label
+                label_Ingame.Text = ingame.Count.ToString("D2");
+
+                //Show/hide ingame info
+                if(ingame.Count > 0)
+                {
+                    panel_Ingame.Visible = true;
+                    pictureBox_Ingame.Visible = true;
+                    label_Ingame.Visible = true;
+                }
+                else
+                {
+                    panel_Ingame.Visible = false;
+                    pictureBox_Ingame.Visible = false;
+                    label_Ingame.Visible = false;
+                }
+
+            }));
         }
 
         //-------------------------------------------------------------
@@ -339,8 +344,7 @@ namespace KobberLan
         {
             if(string.IsNullOrEmpty(dto_suggestion.startServer))
             {
-                var path = Helper.GetDirection();
-                ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams, dto_suggestion.key);
+                ExecuteFile(dto_suggestion.startGame, path, dto_suggestion.startGameParams, dto_suggestion.key);
             }
             else
             {
@@ -350,13 +354,11 @@ namespace KobberLan
                 DialogResult result = MessageBox.Show("Run as client? [Yes] Or server [No]","Server or client",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Question);
                 if(result == DialogResult.Yes)
                 {
-                    var path = Helper.GetDirection();
-                    ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams, dto_suggestion.key);
+                    ExecuteFile(dto_suggestion.startGame, path, dto_suggestion.startGameParams, dto_suggestion.key);
                 }
                 else if (result == DialogResult.No)
                 {
-                    var path = Helper.GetDirection();
-                    ExecuteFile(dto_suggestion.startServer, path + "\\Games\\" + dto_suggestion.key, dto_suggestion.startServerParams, dto_suggestion.key);
+                    ExecuteFile(dto_suggestion.startServer, path, dto_suggestion.startServerParams, dto_suggestion.key);
                 }
                 else
                 {
