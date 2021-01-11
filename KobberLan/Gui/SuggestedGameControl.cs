@@ -275,8 +275,15 @@ namespace KobberLan
         private void button_Play_Click(object sender, EventArgs e)
         //-------------------------------------------------------------
         {
+            string directoryFromStartGame = Path.GetDirectoryName(dto_suggestion.startGame);
+            if(!String.IsNullOrEmpty(directoryFromStartGame))
+            {
+                directoryFromStartGame = "\\" + directoryFromStartGame;
+            }
+            string filename = Path.GetFileName(dto_suggestion.startGame);
+
             var path = Helper.GetDirection();
-            ExecuteFile(dto_suggestion.startGame, path + "\\" + dto_suggestion.key, dto_suggestion.startGameParams, dto_suggestion.key);
+            ExecuteFile(filename, path + "\\" + dto_suggestion.key + directoryFromStartGame, dto_suggestion.startGameParams, dto_suggestion.key);
         }
 
         //-------------------------------------------------------------

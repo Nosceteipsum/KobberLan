@@ -342,9 +342,16 @@ namespace KobberLan
         private void button_Play_Click(object sender, EventArgs e)
         //-------------------------------------------------------------
         {
+            string directoryFromStartGame = Path.GetDirectoryName(dto_suggestion.startGame);
+            if(!String.IsNullOrEmpty(directoryFromStartGame))
+            {
+                directoryFromStartGame = "\\" + directoryFromStartGame;
+            }
+            string filename = Path.GetFileName(dto_suggestion.startGame);
+
             if(string.IsNullOrEmpty(dto_suggestion.startServer))
             {
-                ExecuteFile(dto_suggestion.startGame, path, dto_suggestion.startGameParams, dto_suggestion.key);
+                ExecuteFile(filename, path + directoryFromStartGame, dto_suggestion.startGameParams, dto_suggestion.key);
             }
             else
             {
@@ -354,11 +361,17 @@ namespace KobberLan
                 DialogResult result = MessageBox.Show("Run as client? [Yes] Or server [No]","Server or client",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Question);
                 if(result == DialogResult.Yes)
                 {
-                    ExecuteFile(dto_suggestion.startGame, path, dto_suggestion.startGameParams, dto_suggestion.key);
+                    ExecuteFile(filename, path + directoryFromStartGame, dto_suggestion.startGameParams, dto_suggestion.key);
                 }
                 else if (result == DialogResult.No)
                 {
-                    ExecuteFile(dto_suggestion.startServer, path, dto_suggestion.startServerParams, dto_suggestion.key);
+                    directoryFromStartGame = Path.GetDirectoryName(dto_suggestion.startServer);
+                    if(!String.IsNullOrEmpty(directoryFromStartGame))
+                    {
+                        directoryFromStartGame = "\\" + directoryFromStartGame;
+                    }
+                    filename = Path.GetFileName(dto_suggestion.startServer);
+                    ExecuteFile(filename, path + directoryFromStartGame, dto_suggestion.startServerParams, dto_suggestion.key);
                 }
                 else
                 {
