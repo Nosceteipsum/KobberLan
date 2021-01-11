@@ -163,15 +163,18 @@ namespace KobberLan
             }
             else if (type == TorrentState.Downloading)
             {
+                Log.Get().Write("Game " + GetTitle() + " is downloading in OwnerControl? Maybe incomplete?", Log.LogType.Warning);
+
+                /*
                 progressBar.Visible = false;
                 label_ProgresBar.Visible = true;
                 label_ProgresBar.Text = "Incomplete, please delete .torrent file";
                 label_ProgresBar.Refresh();
-                Log.Get().Write("Game " + GetTitle() + " is incomplete, please delete _kobberlan.torrent file to recreate torrent again.", Log.LogType.Warning);
 
                 button_ShareGet.Enabled = false;
                 Torrent.Get().StopSharing(dto_suggestion.key);
                 button_Clear.Enabled = true;
+                */
             }
             else if (type == TorrentState.Error)
             {
