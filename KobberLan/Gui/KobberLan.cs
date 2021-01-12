@@ -446,6 +446,12 @@ namespace KobberLan
             //Set uniq key (foldername) and default title
             game.key = game.title = new DirectoryInfo(folder).Name;
 
+            //Check for version number in key/foldername
+            if(!game.key.Any(char.IsDigit))
+            {
+                Log.Get().Write("Consider adding version number to game foldername. Key is: " + game.key,Log.LogType.Warning);
+            }
+
             //Check for cover image
             string coverPath = folder + "\\_kobberlan.jpg";
             if (File.Exists(coverPath))
