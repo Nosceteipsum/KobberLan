@@ -666,6 +666,18 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
+        public void UpdateQueueText(int queueSize)
+        //-------------------------------------------------------------
+        {
+            Invoke(new Action(() =>
+            {
+
+                queue0ToolStripMenuItem.Text = "Queue: " + queueSize;
+
+            }));
+        }
+
+        //-------------------------------------------------------------
         public void SetWarnings(int warnings)
         //-------------------------------------------------------------
         {

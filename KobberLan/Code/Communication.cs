@@ -109,11 +109,11 @@ namespace KobberLan.Code
                 if(ex.SocketErrorCode.Equals("ConnectionRefused") ||
                    ex.SocketErrorCode.Equals("TimedOut"))
                 {
-                    Log.Get().Write("Communication client Socketexception: " + ex, Log.LogType.Warning);
+                    Log.Get().Write("Communication client Socketexception (Player disconnected or firewall?) size:" + data.Length + " ip:" + IP + " ex:" + ex, Log.LogType.Warning);
                 }
                 else
                 {
-                    Log.Get().Write("Communication client Socketexception: " + ex, Log.LogType.Error);
+                    Log.Get().Write("Communication client Socketexception (Firewall problem) size:" + data.Length + " ip:" + IP + " ex:" + ex, Log.LogType.Error);
                 }
 
                 Log.Get().Write("Removing " + player?.ToString() + " client from list", Log.LogType.Warning);
@@ -147,6 +147,7 @@ namespace KobberLan.Code
             }
 
             queueNetwork.Add(new QueueNetwork() {DTO = DTO, IP = IP });
+            kobberLanGui.UpdateQueueText(queueNetwork.Count());
         }
 
         //-------------------------------------------------------------
@@ -160,7 +161,21 @@ namespace KobberLan.Code
                 if(queueNetwork.Count > 0)
                 {
                     QueueNetwork packet = queueNetwork.Take();
+                    kobberLanGui.UpdateQueueText(queueNetwork.Count());
 
+                    //Check if player is online
+                    bool playerExist = false;
+                    foreach (IPAddress player in playerList)
+                    {
+                        if (player.ToString().Equals(packet.IP))
+                            playerExist = true;
+                    }
+                    if(!playerExist)
+                    {
+                        continue;
+                    }
+
+                    //Start communication
                     Log.Get().Write("Communication client prepare data");
                     byte[] data = Helper.ObjectToByteArray(packet.DTO);
 
