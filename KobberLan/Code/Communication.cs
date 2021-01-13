@@ -120,6 +120,13 @@ namespace KobberLan.Code
                 if(player != null)
                 {
                     playerList.Remove(player); //Failed to send to client, remove from list
+
+                    //Update gui
+                    kobberLanGui.Invoke(new Action(() =>
+                    {
+                        kobberLanGui.UpdatePlayersAmount(playerList);
+                    }));
+
                 }
 
                 return false;
@@ -130,6 +137,13 @@ namespace KobberLan.Code
                 if (player != null)
                 {
                     playerList.Remove(player); //Failed to send to client, remove from list
+
+                    //Update gui
+                    kobberLanGui.Invoke(new Action(() =>
+                    {
+                        kobberLanGui.UpdatePlayersAmount(playerList);
+                    }));
+
                 }
                 Log.Get().Write("Communication client exception: " + ex, Log.LogType.Error);
                 return false;
