@@ -377,7 +377,7 @@ namespace KobberLan.Code
                                         " , progress: " + torrentManager.Progress
                                         );
 
-                        if (kobberLan != null)
+                        if (kobberLan != null && kobberLan.Disposing == false)
                         {
                             kobberLan.Invoke(new Action(() =>
                             {

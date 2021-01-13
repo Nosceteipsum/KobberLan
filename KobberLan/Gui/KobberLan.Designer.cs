@@ -42,8 +42,9 @@ namespace KobberLan
             this.errors00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.warnings00ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.flowLayoutPanel_SuggestedGames = new System.Windows.Forms.FlowLayoutPanel();
             this.queue0ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flowLayoutPanel_SuggestedGames = new System.Windows.Forms.FlowLayoutPanel();
+            this.getAllSuggestionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -126,7 +127,8 @@ namespace KobberLan
             this.broadcastToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.otherPlayersJoinedToolStripMenuItem,
             this.resendBroadcastToolStripMenuItem,
-            this.networkInterfaceToolStripMenuItem});
+            this.networkInterfaceToolStripMenuItem,
+            this.getAllSuggestionsToolStripMenuItem});
             this.broadcastToolStripMenuItem.Name = "broadcastToolStripMenuItem";
             this.broadcastToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
             this.broadcastToolStripMenuItem.Text = "Network";
@@ -182,6 +184,12 @@ namespace KobberLan
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // queue0ToolStripMenuItem
+            // 
+            this.queue0ToolStripMenuItem.Name = "queue0ToolStripMenuItem";
+            this.queue0ToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.queue0ToolStripMenuItem.Text = "Queue:";
+            // 
             // flowLayoutPanel_SuggestedGames
             // 
             this.flowLayoutPanel_SuggestedGames.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -193,11 +201,12 @@ namespace KobberLan
             this.flowLayoutPanel_SuggestedGames.Size = new System.Drawing.Size(606, 637);
             this.flowLayoutPanel_SuggestedGames.TabIndex = 0;
             // 
-            // queue0ToolStripMenuItem
+            // getAllSuggestionsToolStripMenuItem
             // 
-            this.queue0ToolStripMenuItem.Name = "queue0ToolStripMenuItem";
-            this.queue0ToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
-            this.queue0ToolStripMenuItem.Text = "Queue:";
+            this.getAllSuggestionsToolStripMenuItem.Name = "getAllSuggestionsToolStripMenuItem";
+            this.getAllSuggestionsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.getAllSuggestionsToolStripMenuItem.Text = "GetAllSuggestions";
+            this.getAllSuggestionsToolStripMenuItem.Click += new System.EventHandler(this.getAllSuggestionsToolStripMenuItem_Click);
             // 
             // KobberLan
             // 
@@ -241,6 +250,7 @@ namespace KobberLan
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem networkInterfaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem queue0ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem getAllSuggestionsToolStripMenuItem;
     }
 }
 

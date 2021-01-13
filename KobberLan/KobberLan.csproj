@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="Code\Broadcast.cs" />
     <Compile Include="Code\Communication.cs" />
+    <Compile Include="Code\DTO_RequestAllSuggestions.cs" />
     <Compile Include="Code\DTO_AlreadyOwnIt.cs" />
     <Compile Include="Code\DTO_GameStatus.cs" />
     <Compile Include="Code\DTO_SuggestionInternet.cs" />

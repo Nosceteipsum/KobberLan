@@ -163,16 +163,19 @@ namespace KobberLan.Code
                     QueueNetwork packet = queueNetwork.Take();
                     kobberLanGui.UpdateQueueText(queueNetwork.Count());
 
-                    //Check if player is online
-                    bool playerExist = false;
-                    foreach (IPAddress player in playerList)
+                    //Check if player is online if IP is specified
+                    if(!String.IsNullOrEmpty(packet.IP))
                     {
-                        if (player.ToString().Equals(packet.IP))
-                            playerExist = true;
-                    }
-                    if(!playerExist)
-                    {
-                        continue;
+                        bool playerExist = false;
+                        foreach (IPAddress player in playerList)
+                        {
+                            if (player.ToString().Equals(packet.IP))
+                                playerExist = true;
+                        }
+                        if(!playerExist)
+                        {
+                            continue;
+                        }
                     }
 
                     //Start communication
@@ -351,6 +354,15 @@ namespace KobberLan.Code
                 kobberLanGui.Invoke(new Action(() =>
                 {
                     kobberLanGui.GotGameStatus(gameStatus);
+                }));
+            }
+            else if (dataObject.GetType() == typeof(DTO_RequestAllSuggestions))
+            {
+                DTO_RequestAllSuggestions gameStatus = (DTO_RequestAllSuggestions)dataObject;
+                Log.Get().Write("Communication server handle client get all Suggestions: " + gameStatus.address.ToString());
+                kobberLanGui.Invoke(new Action(() =>
+                {
+                    kobberLanGui.UpdatePlayerSuggested(gameStatus.address.ToString());
                 }));
             }
             else

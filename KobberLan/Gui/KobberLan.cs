@@ -749,5 +749,14 @@ namespace KobberLan
         {
             chooseNetworkInterface.ShowDialog();
         }
+
+        //-------------------------------------------------------------
+        private void getAllSuggestionsToolStripMenuItem_Click(object sender, EventArgs e)
+        //-------------------------------------------------------------
+        {
+            //Request all suggestions
+            Log.Get().Write("Communication client prepare to send GetAllSuggestions");
+            communication.ClientSend(new DTO_RequestAllSuggestions { address = Helper.GetHostIP() });
+        }
     }
 }

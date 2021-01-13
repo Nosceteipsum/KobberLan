@@ -213,17 +213,17 @@ namespace KobberLan.Code
                             {
                                 kobberLanGui.UpdatePlayersAmount(playersFound);
                             }));
+
+                            //Send suggested game (Only to new players)
+                            kobberLanGui.Invoke(new Action(() =>
+                            {
+                                kobberLanGui.UpdatePlayerSuggested(otherIPAddress.Address.ToString());
+                            }));
                         }
                         else
                         {
                             Log.Get().Write("Broadcast player already exist", Log.LogType.Info);
                         }
-
-                        //Send suggested game (Both to new and rejoined players)
-                        kobberLanGui.Invoke(new Action(() =>
-                        {
-                            kobberLanGui.UpdatePlayerSuggested(otherIPAddress.Address.ToString());
-                        }));
                     }
                 }
                 //-------------------------------------------------------------
