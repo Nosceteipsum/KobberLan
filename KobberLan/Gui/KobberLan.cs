@@ -691,6 +691,10 @@ namespace KobberLan
         private void errorsToolStripMenuItem_Click(object sender, EventArgs e)
         //-------------------------------------------------------------
         {
+            //Remove color when reading warnings
+            if(logs00ToolStripMenuItem.BackColor == Color.Red)
+                logs00ToolStripMenuItem.BackColor = SystemColors.Control;
+
             if(Log.Get().Errors() > 0)
             {
                 string path = "file:///" + Application.StartupPath + "/Logs/error.html";
@@ -711,6 +715,10 @@ namespace KobberLan
         private void warningsToolStripMenuItem_Click(object sender, EventArgs e)
         //-------------------------------------------------------------
         {
+            //Remove color when reading warnings
+            if(logs00ToolStripMenuItem.BackColor == Color.LightYellow)
+                logs00ToolStripMenuItem.BackColor = SystemColors.Control;
+
             if (Log.Get().Warnings() > 0)
             {
                 string path = "file:///" + Application.StartupPath + "/Logs/warning.html";
