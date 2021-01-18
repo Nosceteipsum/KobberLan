@@ -198,17 +198,25 @@ namespace KobberLan.Code
                     Log.Get().Write("Portcheck handling"); //Ignore message
                 }
                 //-------------------------------------------------------------
-                //Broadcast message - SEARCH
+                //Broadcast message - DISCONNECT
                 //-------------------------------------------------------------
                 else if (msg.Equals(BROADCAST_MESSAGE_DISCONNECT.ToString()))
                 {
                     Log.Get().Write("Broadcast handling message. Another player is disconnecting: " + otherIPAddress.Address.ToString());
 
-                    //Update gui
-                    kobberLanGui.Invoke(new Action(() =>
+                    //Ignore own server
+                    if (Helper.GetHostIP().ToString().Equals(otherIPAddress.Address.ToString()))
                     {
-                        kobberLanGui.RemovePlayer(otherIPAddress.Address.ToString());
-                    }));
+                        Log.Get().Write("Broadcast disconnect ignore own server", Log.LogType.Info);
+                    }
+                    else
+                    {
+                        //Update gui
+                        kobberLanGui.Invoke(new Action(() =>
+                        {
+                            kobberLanGui.RemovePlayer(otherIPAddress.Address.ToString());
+                        }));
+                    }
                 }
                 //-------------------------------------------------------------
                 //Broadcast message - SEARCH
@@ -220,7 +228,7 @@ namespace KobberLan.Code
                     //Ignore own server
                     if (Helper.GetHostIP().ToString().Equals(otherIPAddress.Address.ToString()))
                     {
-                        Log.Get().Write("Broadcast ignore own server", Log.LogType.Info);
+                        Log.Get().Write("Broadcast search ignore own server", Log.LogType.Info);
                     }
                     else
                     {
