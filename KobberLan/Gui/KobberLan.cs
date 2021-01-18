@@ -250,6 +250,24 @@ namespace KobberLan
         }
 
         //-------------------------------------------------------------
+        public void RemovePlayer(String IP)
+        //-------------------------------------------------------------
+        {
+            //Remove player from list
+            foreach (IPAddress player in communication.GetPlayerList())
+            {
+                if (player.ToString().Equals(IP))
+                {
+                    communication.GetPlayerList().Remove(player);
+                    break;
+                }
+            }
+
+            //Update player amount
+            UpdatePlayersAmount(communication.GetPlayerList());
+        }
+
+        //-------------------------------------------------------------
         public void UpdatePlayersAmount(SynchronizedCollection<IPAddress> players)
         //-------------------------------------------------------------
         {
@@ -263,7 +281,7 @@ namespace KobberLan
         //-------------------------------------------------------------
         {
             //Update taskbar icon
-            if(players < 0)notifyIcon1.Icon = new System.Drawing.Icon(@"icons//mesh0.ico");
+            if(players <= 0)notifyIcon1.Icon = new System.Drawing.Icon(@"icons//mesh0.ico");
             else if (players > 0 && players <= 9) notifyIcon1.Icon = new System.Drawing.Icon(@"icons//mesh" + players + ".ico");
             else if (players > 9)notifyIcon1.Icon = new System.Drawing.Icon(@"icons//meshX.ico");
 
@@ -284,13 +302,14 @@ namespace KobberLan
             else
             {
                 //-------------------------------------------------------------
-                //Close broadcast
+                //Send close message
                 //-------------------------------------------------------------
-                if (broadcast != null)
-                {
-                    broadcast.CloseAll();
-                    broadcast = null;
-                }
+                broadcast.ClientSendBroadCast_Disconnect();
+
+                //-------------------------------------------------------------
+                //Remove icon
+                //-------------------------------------------------------------
+                notifyIcon1.Visible = false;            
 
                 //-------------------------------------------------------------
                 //Close communication
@@ -302,10 +321,15 @@ namespace KobberLan
                 }
 
                 //-------------------------------------------------------------
-                //Remove icon
+                //Close broadcast
                 //-------------------------------------------------------------
-                notifyIcon1.Visible = false;            
+                if (broadcast != null)
+                {
+                    broadcast.CloseAll();
+                    broadcast = null;
                 }
+
+            }
         }
 
         //-------------------------------------------------------------

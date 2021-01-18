@@ -17,7 +17,8 @@ namespace KobberLan.Code
     {
         public static int BROADCAST_PORT;
 
-        private string BROADCAST_MESSAGE = "B";
+        private string BROADCAST_MESSAGE_SEARCH = "B";
+        private string BROADCAST_MESSAGE_DISCONNECT = "D";
         private string BROADCAST_PORTCHECK = "P";
 
         private Thread threadServer;
@@ -65,14 +66,14 @@ namespace KobberLan.Code
         //-------------------------------------------------------------
         {
             Log.Get().Write("Broadcast starting server thread");
-            threadServer = new Thread(new ThreadStart(ServerListenBroadCast));
+            threadServer = new Thread(new ThreadStart(ServerListenBroadCast_Search));
             threadServerActive = true;
             threadServer.Start();
             threadClientActive = true;
         }
 
         //-------------------------------------------------------------
-        private void ServerListenBroadCast()
+        private void ServerListenBroadCast_Search()
         //-------------------------------------------------------------
         {
             if (!Helper.IsPortAvailable(BROADCAST_PORT))
@@ -95,7 +96,7 @@ namespace KobberLan.Code
                     Log.Get().Write("Broadcast server received " + ClientRequest + " from " + ClientEp.Address.ToString() + ", sending response");
                     
                     //Send response to client
-                    broadcastServer.Send(Encoding.ASCII.GetBytes(BROADCAST_MESSAGE), BROADCAST_MESSAGE.Length, ClientEp);
+                    broadcastServer.Send(Encoding.ASCII.GetBytes(BROADCAST_MESSAGE_SEARCH), BROADCAST_MESSAGE_SEARCH.Length, ClientEp);
 
                     //Handle message
                     HandleMessage(ClientRequest, ClientEp);
@@ -136,11 +137,19 @@ namespace KobberLan.Code
         }
 
         //-------------------------------------------------------------
+        public void ClientSendBroadCast_Disconnect()
+        //-------------------------------------------------------------
+        {
+            Log.Get().Write("Broadcast client broadcasting disconnect");
+            broadcastClient.Send(Encoding.ASCII.GetBytes(BROADCAST_MESSAGE_DISCONNECT), BROADCAST_MESSAGE_DISCONNECT.Length, new IPEndPoint(Helper.GetHostIPBroadcastAddress(), BROADCAST_PORT));
+        }
+
+        //-------------------------------------------------------------
         private void ClientBroadcast()
         //-------------------------------------------------------------
         {
             Log.Get().Write("Broadcast client broadcasting message");
-            broadcastClient.Send(Encoding.ASCII.GetBytes(BROADCAST_MESSAGE), BROADCAST_MESSAGE.Length, new IPEndPoint(Helper.GetHostIPBroadcastAddress(), BROADCAST_PORT));
+            broadcastClient.Send(Encoding.ASCII.GetBytes(BROADCAST_MESSAGE_SEARCH), BROADCAST_MESSAGE_SEARCH.Length, new IPEndPoint(Helper.GetHostIPBroadcastAddress(), BROADCAST_PORT));
 
             while(threadClientActive)
             {
@@ -189,9 +198,22 @@ namespace KobberLan.Code
                     Log.Get().Write("Portcheck handling"); //Ignore message
                 }
                 //-------------------------------------------------------------
-                //Broadcast message
+                //Broadcast message - SEARCH
                 //-------------------------------------------------------------
-                else if (msg.Equals(BROADCAST_MESSAGE.ToString()))
+                else if (msg.Equals(BROADCAST_MESSAGE_DISCONNECT.ToString()))
+                {
+                    Log.Get().Write("Broadcast handling message. Another player is disconnecting: " + otherIPAddress.Address.ToString());
+
+                    //Update gui
+                    kobberLanGui.Invoke(new Action(() =>
+                    {
+                        kobberLanGui.RemovePlayer(otherIPAddress.Address.ToString());
+                    }));
+                }
+                //-------------------------------------------------------------
+                //Broadcast message - SEARCH
+                //-------------------------------------------------------------
+                else if (msg.Equals(BROADCAST_MESSAGE_SEARCH.ToString()))
                 {
                     Log.Get().Write("Broadcast handling message. Another player responded by broadcast: " + otherIPAddress.Address.ToString());
 
