@@ -27,6 +27,8 @@ namespace KobberLan.Code
         private bool threadServerActive;
         private bool threadClientActive;
 
+        private bool firewallBlocking;
+
         private UdpClient broadcastServer = null;
         private UdpClient broadcastClient = null;
 
@@ -40,6 +42,8 @@ namespace KobberLan.Code
         public Broadcast(KobberLan gui)
         //-------------------------------------------------------------
         {
+            firewallBlocking = true;
+
             //Read port from ApplicationConfig
             BROADCAST_PORT = Convert.ToInt32( ConfigurationManager.AppSettings.Get("Port:BroadcastUDP") );
 
@@ -58,6 +62,13 @@ namespace KobberLan.Code
             threadClientActive = false;
             if(broadcastServer != null)broadcastServer.Close();
             if(broadcastClient != null)broadcastClient.Close();
+        }
+
+        //-------------------------------------------------------------
+        public bool FirewallProblem()
+        //-------------------------------------------------------------
+        {
+            return firewallBlocking;
         }
 
         //-------------------------------------------------------------
@@ -228,6 +239,7 @@ namespace KobberLan.Code
                     //Ignore own server
                     if (Helper.GetHostIP().ToString().Equals(otherIPAddress.Address.ToString()))
                     {
+                        firewallBlocking = false;
                         Log.Get().Write("Broadcast search ignore own server", Log.LogType.Info);
                     }
                     else

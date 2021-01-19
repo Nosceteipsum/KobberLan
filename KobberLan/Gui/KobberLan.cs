@@ -403,8 +403,40 @@ namespace KobberLan
 
                     if(countBroadcast <= 0)
                     {
+                        //-------------------------------------------------------------
+                        //Disable timer
+                        //-------------------------------------------------------------
                         resendBroadcastToolStripMenuItem.Enabled = true;
                         BroadCastTimer.Enabled = false;
+
+                        //-------------------------------------------------------------
+                        //Check for UDP broadcast firewall problem
+                        //-------------------------------------------------------------
+                        if(broadcast.FirewallProblem())
+                        {
+                            Log.Get().Write("UDP broadcast not working, please check firewall. UDP port: " + Broadcast.BROADCAST_PORT + " TCP port: " + Communication.COMMUNICATION_PORT , Log.LogType.Error);
+
+                            /*
+                            DialogResult dialogResult = MessageBox.Show(this,"BroadCast UDP port: " + Broadcast.BROADCAST_PORT  + " is blocked by Windows firewall. Try to open port?","Firewall",MessageBoxButtons.YesNo);
+                            if(dialogResult == DialogResult.Yes)
+                            {
+                                countBroadcast = 3;
+
+                                //-------------------------------------------------------------
+                                //Open UDP port 
+                                //-------------------------------------------------------------
+                                
+
+                                //-------------------------------------------------------------
+                                //Enable timer again
+                                //-------------------------------------------------------------
+                                resendBroadcastToolStripMenuItem.Enabled = true;
+                                BroadCastTimer.Enabled = false;
+                            }
+                            else if (dialogResult == DialogResult.No){}
+                            */
+                        }
+
                     }
                 }
             }
