@@ -1,30 +1,22 @@
-using KobberLan.Code;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System;
+using Avalonia;
 
 namespace KobberLan
 {
-    static class Program
+    internal sealed class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        // Initialization code. Don't use any Avalonia, third-party APIs or any
+        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+        // yet and stuff might break.
         [STAThread]
-        static void Main()
-        {
-            //Catch all exceptions
-            Application.ThreadException += new ThreadExceptionEventHandler(Log.Get().ThreadException); // Add the event handler for handling UI thread exceptions to the event.
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException); // Set the unhandled exception mode to force all Windows Forms errors to go through our handler.
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(Log.Get().UnhandledException); // Add the event handler for handling non-UI thread exceptions to the event. 
+        public static void Main(string[] args) => BuildAvaloniaApp()
+            .StartWithClassicDesktopLifetime(args);
 
-            //Start program
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new KobberLan());
-        }
+        // Avalonia configuration, don't remove; also used by visual designer.
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .WithInterFont()
+                .LogToTrace();
     }
 }
