@@ -1,3 +1,5 @@
+Note: Obsolete. Uses an old .NET Framework and only runs on Windows.
+
 # KobberLan
 Lan Party Tool.  
 Make it easy to suggest, share and start games in a LocalAreaNetwork.  
