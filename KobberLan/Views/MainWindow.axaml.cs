@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using KobberLan.ViewModels;
@@ -15,8 +16,28 @@ namespace KobberLan.Views
         
         private async void About_Click(object? sender, RoutedEventArgs e)
         {
-            var dlg = new AboutWindow();
-            await dlg.ShowDialog(this);
-        }        
+            try
+            {
+                var dlg = new AboutWindow();
+                await dlg.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        
+        private async void Interface_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var dlg = new InterfaceWindow();
+                await dlg.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
     }
 }
