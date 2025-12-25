@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,15 +21,26 @@ public static class NetworkAdapters
             if (ni.NetworkInterfaceType == NetworkInterfaceType.Tunnel) continue;
 
             IPInterfaceProperties props;
-            try { props = ni.GetIPProperties(); }
-            catch { continue; }
+            try
+            {
+                props = ni.GetIPProperties();
+            }
+            catch(Exception ex)
+            {
+                AppLog.Error("Network adapters not found", ex);
+                continue;
+            }
 
             var ipv4 = props.UnicastAddresses
                 .Where(a => a.Address.AddressFamily == AddressFamily.InterNetwork)
                 .Select(a => a.Address)
                 .FirstOrDefault(a => !IsApipa(a));
 
-            if (ipv4 is null) continue;
+            if (ipv4 is null)
+            {
+                AppLog.Warn("IP not found for adapter " + ni.Name);
+                continue;
+            }
 
             list.Add(new NetworkAdapterInfo
             {
