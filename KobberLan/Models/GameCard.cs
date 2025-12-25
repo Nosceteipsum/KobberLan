@@ -1,11 +1,12 @@
 using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace KobberLan.Models;
 
-public class GameCard
+public partial class GameCard : ObservableObject
 {
     public string Title { get; set; } = "";
     public Bitmap? Cover { get; set; }
-    public int Likes { get; set; }
-    public int Players { get; set; }
+    [ObservableProperty] private int likes;
+    [ObservableProperty] private int players;
 }
