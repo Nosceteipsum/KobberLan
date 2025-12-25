@@ -3,18 +3,41 @@
         xmlns:vm="using:KobberLan.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="450"
         x:Class="KobberLan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
         Title="KobberLan">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    <DockPanel>
+        <!-- Top menu -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Load settings"/>
+                <MenuItem Header="Save settings"/>
+                <Separator/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <MenuItem Header="Suggest">
+                <MenuItem Header="Suggest game" />
+                <MenuItem Header="Suggest game from HDD" />
+                <MenuItem Header="Suggest game from Internet" />
+            </MenuItem>
+
+            <MenuItem Header="Network">
+                <MenuItem Header="Network interface"/>
+                <MenuItem Header="Resend broadcast"/>
+            </MenuItem>
+            <MenuItem Header="About">
+            </MenuItem>            
+        </Menu>
+
+        <!-- Main content -->
+        <Grid>
+            <TextBlock Text="{Binding Greeting}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+        </Grid>
+    </DockPanel>
 
 </Window>
