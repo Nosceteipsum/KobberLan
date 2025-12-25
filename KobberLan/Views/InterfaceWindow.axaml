@@ -6,8 +6,8 @@
         CanResize="False"
         WindowStartupLocation="CenterOwner">
     <StackPanel Margin="16" Spacing="10">
-        <TextBlock FontSize="20" FontWeight="Bold" Text="KobberLan" />
-        <TextBlock Text="LAN game suggester" />
+        <TextBlock FontSize="20" FontWeight="Bold" Text="Network Interface" />
+        <TextBlock Text="Select the network interface to use for LAN games." />
         <Button HorizontalAlignment="Right" Content="OK" Click="Ok_Click"/>
     </StackPanel>
 </Window>
