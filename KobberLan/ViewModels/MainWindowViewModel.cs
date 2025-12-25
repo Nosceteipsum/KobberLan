@@ -52,7 +52,7 @@ namespace KobberLan.ViewModels
 
         public void StartDiscovery()
         {
-            Console.WriteLine("Starter discovery...");
+            Console.WriteLine("Starting discovery...");
             WindowTitle = "KobberLan - Scanning...";
         }
         
