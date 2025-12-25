@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using KobberLan.ViewModels;
 
 namespace KobberLan.Views
@@ -11,5 +12,11 @@ namespace KobberLan.Views
             Opened += (_, _) => (DataContext as MainWindowViewModel)?.StartDiscovery();
             Closed += (_, _) => (DataContext as MainWindowViewModel)?.StopDiscovery();            
         }
+        
+        private async void About_Click(object? sender, RoutedEventArgs e)
+        {
+            var dlg = new AboutWindow();
+            await dlg.ShowDialog(this);
+        }        
     }
 }

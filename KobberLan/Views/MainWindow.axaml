@@ -31,8 +31,7 @@
                 <MenuItem Header="Network interface"/>
                 <MenuItem Header="Resend broadcast"/>
             </MenuItem>
-            <MenuItem Header="About">
-            </MenuItem>            
+          <MenuItem Header="About" Click="About_Click"/>
         </Menu>
 
         <!-- Main content -->
