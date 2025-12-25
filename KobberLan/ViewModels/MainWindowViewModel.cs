@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KobberLan.Models;
 
@@ -10,7 +11,8 @@ namespace KobberLan.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         public ObservableCollection<GameCard> Games { get; } = new();
-
+        [ObservableProperty] private string windowTitle = "KobberLan";
+        
         public MainWindowViewModel()
         {
             var asm = typeof(App).Assembly.GetName().Name;
@@ -45,6 +47,19 @@ namespace KobberLan.ViewModels
         private void Clear(GameCard game) { /* ... */ }
 
         [RelayCommand]
-        private void Play(GameCard game) { /* ... */ }        
+        private void Play(GameCard game) { /* ... */ }
+
+
+        public void StartDiscovery()
+        {
+            Console.WriteLine("Starter discovery...");
+            WindowTitle = "KobberLan - Scanning...";
+        }
+        
+        public void StopDiscovery()
+        {
+            Console.WriteLine("Stop discovery...");
+            
+        }
     }
 }
