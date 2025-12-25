@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,12 +12,14 @@ namespace KobberLan.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = new();
         public ObservableCollection<GameCard> Games { get; } = new();
+        
         [ObservableProperty] private string windowTitle = "KobberLan";
+        [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;        
         
         public MainWindowViewModel()
         {
-            //Todo: Example, remove when implemented correctly
             var asm = typeof(App).Assembly.GetName().Name;
             var uri = new Uri($"avares://{asm}/Assets/covermissing.jpg");
             using var s = AssetLoader.Open(uri);
@@ -36,8 +39,32 @@ namespace KobberLan.ViewModels
                 Cover = bmp,
                 Likes = 4,
                 Players = 2
-            });            
+            });
+            
+            RefreshAdapters();
+            RefreshTitle();
         }
+        
+        [RelayCommand]
+        private void RefreshAdapters()
+        {
+            Adapters.Clear();
+            foreach (var adapterInfo in NetworkAdapters.GetUsableIPv4Adapters())
+            {
+                Adapters.Add(adapterInfo);
+            }
+
+            if (SelectedAdapter is not null)
+            {
+                var stillThere = Adapters.FirstOrDefault(x => x.Id == SelectedAdapter.Id);
+                if (stillThere is not null)
+                {
+                    SelectedAdapter = stillThere;
+                }
+            }
+
+            SelectedAdapter ??= Adapters.FirstOrDefault();
+        }        
         
         [RelayCommand]
         private void Like(GameCard game) => game.Likes++;
@@ -52,10 +79,14 @@ namespace KobberLan.ViewModels
         private void Play(GameCard game) { /* ... */ }
 
 
+        public void RefreshTitle()
+        {
+            WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4}";
+        }
+        
         public void StartDiscovery()
         {
             AppLog.Info("Starting discovery...");
-            WindowTitle = "KobberLan - Scanning...";
         }
         
         public void StopDiscovery()

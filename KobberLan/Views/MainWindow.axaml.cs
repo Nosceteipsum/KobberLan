@@ -32,8 +32,10 @@ namespace KobberLan.Views
         {
             try
             {
-                var dlg = new InterfaceWindow();
-                await dlg.ShowDialog(this);
+                var w = new InterfaceWindow();
+                w.DataContext = DataContext;
+                await w.ShowDialog(this);
+                (DataContext as MainWindowViewModel)?.RefreshTitle();
             }
             catch (Exception ex)
             {
