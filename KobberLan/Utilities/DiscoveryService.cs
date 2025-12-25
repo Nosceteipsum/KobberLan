@@ -219,7 +219,7 @@ public sealed class DiscoveryService : IAsyncDisposable
         var mask = ni?.IPv4Mask;
         if (mask is null)
         {
-            // fallback: “global” broadcast (virker ofte, men ikke altid på alle setups)
+            // fallback: "global" broadcast (often works, but not always on all setups)
             return IPAddress.Broadcast;
         }
 
