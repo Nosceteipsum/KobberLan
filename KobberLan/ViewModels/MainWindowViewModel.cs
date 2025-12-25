@@ -15,6 +15,7 @@ namespace KobberLan.ViewModels
         
         public MainWindowViewModel()
         {
+            //Todo: Example, remove when implemented correctly
             var asm = typeof(App).Assembly.GetName().Name;
             var uri = new Uri($"avares://{asm}/Assets/covermissing.jpg");
             using var s = AssetLoader.Open(uri);

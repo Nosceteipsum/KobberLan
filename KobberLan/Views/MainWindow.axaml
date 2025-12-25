@@ -15,8 +15,7 @@
         <!-- Top menu -->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Load settings"/>
-                <MenuItem Header="Save settings"/>
+                <MenuItem Header="Logs"/>
                 <Separator/>
                 <MenuItem Header="Exit"/>
             </MenuItem>
