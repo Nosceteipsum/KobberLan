@@ -3,18 +3,113 @@
         xmlns:vm="using:KobberLan.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:models="clr-namespace:KobberLan.Models"
+        mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="450"
+        x:Name="Main"
         x:Class="KobberLan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="KobberLan">
+        Icon="avares://KobberLan/Assets/mesh0.ico"
+        Title="{Binding WindowTitle}">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    <DockPanel>
+        <!-- Top menu -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Logs" Click="ShowLog_Click" />
+                <Separator/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <MenuItem Header="Suggest">
+                <MenuItem Header="Suggest game" />
+                <MenuItem Header="Suggest game from HDD" />
+                <MenuItem Header="Suggest game from Internet" />
+            </MenuItem>
+
+            <MenuItem Header="Network">
+                <MenuItem Header="Network interface" Click="Interface_Click"/>
+                <MenuItem Header="Resend broadcast"/>
+            </MenuItem>
+          <MenuItem Header="About" Click="About_Click"/>
+        </Menu>
+
+        <!-- Main content -->
+        <ScrollViewer>
+          <ItemsControl ItemsSource="{Binding Games}">
+            <!-- Wrap layout: cards flyder og “wrap’er” -->
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="models:GameCard">
+                
+                <!-- Styles !-->
+                <Border Width="220"
+                        Margin="8"
+                        Padding="8"
+                        BorderThickness="1"
+                        BorderBrush="#444"
+                        Background="#1A1A1A"
+                        CornerRadius="6">
+                  
+                  <Border.Styles>
+                    <Style Selector="Button">
+                      <Setter Property="FontSize" Value="14"/>
+                      
+                      <Setter Property="Padding" Value="4,2"/>
+                      <Setter Property="MinWidth" Value="50"/>
+                      <Setter Property="MinHeight" Value="28"/>
+                      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                      <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                  </Border.Styles>                  
+                  
+                  <StackPanel Spacing="6">
+
+                    <!-- Titel -->
+                    <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Stretch"/>
+
+                    <!-- Cover -->
+                    <Border Height="140" BorderThickness="1" ClipToBounds="True">
+                      <Image Source="{Binding Cover}"
+                             Stretch="Uniform"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                    </Border>
+
+                    <!-- Ikoner + tal -->
+                    <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto" VerticalAlignment="Center">
+                      <!-- 👍 likes -->
+                      <TextBlock Grid.Column="0" Text="👍" />
+                      <TextBlock Grid.Column="1" Margin="4,0,0,0" Text="{Binding Likes}" />
+
+                      <!-- spacer i midten -->
+                      <TextBlock Grid.Column="2"/>
+
+                      <!-- 👤 players -->
+                      <TextBlock Grid.Column="3" Text="👤" />
+                      <TextBlock Grid.Column="4" Margin="4,0,0,0" Text="{Binding Players}" />
+                    </Grid>
+
+                    <!-- Knapper -->
+                    <UniformGrid Columns="4" Rows="1">
+                      <Button Content="Like"  Command="{Binding $parent[Window].DataContext.LikeCommand}"  CommandParameter="{Binding}" />
+                      <Button Content="Share" Command="{Binding $parent[Window].DataContext.ShareCommand}" CommandParameter="{Binding}" />
+                      <Button Content="Clear" Command="{Binding $parent[Window].DataContext.ClearCommand}" CommandParameter="{Binding}" />
+                      <Button Content="Play" Command="{Binding $parent[Window].DataContext.PlayCommand}" CommandParameter="{Binding}" />
+                    </UniformGrid>
+
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+        
+        
+    </DockPanel>
 
 </Window>

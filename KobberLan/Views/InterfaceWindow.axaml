@@ -1,0 +1,13 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="KobberLan.Views.InterfaceWindow"
+        Width="420" Height="240"
+        Title="Network Interface"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner">
+    <StackPanel Margin="16" Spacing="10">
+        <TextBlock FontSize="20" FontWeight="Bold" Text="Network Interface" />
+        <TextBlock Text="Select the network interface to use for LAN games." />
+        <Button HorizontalAlignment="Right" Content="OK" Click="Ok_Click"/>
+    </StackPanel>
+</Window>
