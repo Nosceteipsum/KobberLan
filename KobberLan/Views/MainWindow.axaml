@@ -6,6 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="450"
         x:Class="KobberLan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
+        Icon="avares://KobberLan/Assets/mesh0.ico"
         Title="KobberLan">
 
     <DockPanel>
