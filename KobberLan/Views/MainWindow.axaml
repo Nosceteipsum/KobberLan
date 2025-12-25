@@ -3,6 +3,7 @@
         xmlns:vm="using:KobberLan.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:KobberLan.Models"
         mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="450"
         x:Class="KobberLan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -34,11 +35,67 @@
         </Menu>
 
         <!-- Main content -->
-        <Grid>
-            <TextBlock Text="{Binding Greeting}"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-        </Grid>
+        <ScrollViewer>
+          <ItemsControl ItemsSource="{Binding Games}">
+            <!-- Wrap layout: cards flyder og “wrap’er” -->
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="models:GameCard">
+                <Border Width="220"
+                        Margin="8"
+                        Padding="8"
+                        BorderThickness="1"
+                        BorderBrush="#444"
+                        Background="#1A1A1A"
+                        CornerRadius="6">
+                  <StackPanel Spacing="6">
+
+                    <!-- Titel -->
+                    <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="Bold" TextAlignment="Center" HorizontalAlignment="Stretch"/>
+
+                    <!-- Cover -->
+                    <Border Height="140" BorderThickness="1" ClipToBounds="True">
+                      <Image Source="{Binding Cover}"
+                             Stretch="Uniform"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                    </Border>
+
+                    <!-- Ikoner + tal -->
+                    <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto" VerticalAlignment="Center">
+                      <!-- 👍 likes -->
+                      <TextBlock Grid.Column="0" Text="👍" />
+                      <TextBlock Grid.Column="1" Margin="4,0,0,0" Text="{Binding Likes}" />
+
+                      <!-- spacer i midten -->
+                      <TextBlock Grid.Column="2"/>
+
+                      <!-- 👤 players -->
+                      <TextBlock Grid.Column="3" Text="👤" />
+                      <TextBlock Grid.Column="4" Margin="4,0,0,0" Text="{Binding Players}" />
+                    </Grid>
+
+                    <!-- Knapper -->
+                    <UniformGrid Columns="4" Rows="1">
+                      <Button Content="Like"  Command="{Binding $parent[Window].DataContext.LikeCommand}"  CommandParameter="{Binding}" />
+                      <Button Content="Share" Command="{Binding $parent[Window].DataContext.ShareCommand}" CommandParameter="{Binding}" />
+                      <Button Content="Clear" Command="{Binding $parent[Window].DataContext.ClearCommand}" CommandParameter="{Binding}" />
+                      <Button Content="Play"  Command="{Binding $parent[Window].DataContext.PlayCommand}"  CommandParameter="{Binding}" />
+                    </UniformGrid>
+
+                  </StackPanel>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+        
+        
     </DockPanel>
 
 </Window>
