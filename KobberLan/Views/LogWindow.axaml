@@ -1,0 +1,18 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:utilities="clr-namespace:KobberLan.Utilities"
+        x:Class="KobberLan.Views.LogWindow"
+        x:DataType="utilities:LogStore"
+        Width="800" Height="400"
+        Title="Log"
+        WindowStartupLocation="CenterOwner">
+    <DataGrid ItemsSource="{Binding Entries}"
+              IsReadOnly="True"
+              AutoGenerateColumns="False">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="Time" Binding="{Binding Time}" Width="200"/>
+            <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="90"/>
+            <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*"/>
+        </DataGrid.Columns>
+    </DataGrid>
+</Window>

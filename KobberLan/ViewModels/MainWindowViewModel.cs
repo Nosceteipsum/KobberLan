@@ -5,6 +5,7 @@ using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KobberLan.Models;
+using KobberLan.Utilities;
 
 namespace KobberLan.ViewModels
 {
@@ -53,14 +54,13 @@ namespace KobberLan.ViewModels
 
         public void StartDiscovery()
         {
-            Console.WriteLine("Starting discovery...");
+            AppLog.Info("Starting discovery...");
             WindowTitle = "KobberLan - Scanning...";
         }
         
         public void StopDiscovery()
         {
-            Console.WriteLine("Stop discovery...");
-            
+            AppLog.Info("Stop discovery...");
         }
     }
 }

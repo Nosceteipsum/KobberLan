@@ -15,7 +15,7 @@
         <!-- Top menu -->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
-                <MenuItem Header="Logs"/>
+                <MenuItem Header="Logs" Click="ShowLog_Click" />
                 <Separator/>
                 <MenuItem Header="Exit"/>
             </MenuItem>

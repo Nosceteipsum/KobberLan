@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using KobberLan.Utilities;
 using KobberLan.ViewModels;
 
 namespace KobberLan.Views
@@ -23,7 +24,7 @@ namespace KobberLan.Views
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                AppLog.Error("About_Click exception.",ex);
             }
         }
         
@@ -36,8 +37,13 @@ namespace KobberLan.Views
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                AppLog.Error("Interface_Click exception.",ex);
             }
         }
+        
+        private void ShowLog_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            new LogWindow().ShowDialog(this);
+        }        
     }
 }
