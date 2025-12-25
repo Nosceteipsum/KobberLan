@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KobberLan.Models;
@@ -12,11 +14,13 @@ namespace KobberLan.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        public ObservableCollection<string> Players { get; } = new();
         public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = new();
         public ObservableCollection<GameCard> Games { get; } = new();
         
         [ObservableProperty] private string windowTitle = "KobberLan";
-        [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;        
+        [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
+        private readonly DiscoveryService discovery = new(port: 50000);
         
         public MainWindowViewModel()
         {
@@ -43,6 +47,7 @@ namespace KobberLan.ViewModels
             
             RefreshAdapters();
             RefreshTitle();
+            InitBroadcast();
         }
         
         [RelayCommand]
@@ -78,7 +83,7 @@ namespace KobberLan.ViewModels
         [RelayCommand]
         private void Play(GameCard game) { /* ... */ }
 
-
+        
         public void RefreshTitle()
         {
             WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4}";
@@ -87,11 +92,27 @@ namespace KobberLan.ViewModels
         public void StartDiscovery()
         {
             AppLog.Info("Starting discovery...");
+            if (SelectedAdapter?.IPv4 == null)
+            {
+                AppLog.Warn("SelectedAdapter is null, can't send broadcast");
+                return;
+            }
+            
+            discovery.Start(SelectedAdapter.IPv4);
+            _ = discovery.BroadcastSearchAsync();
         }
         
-        public void StopDiscovery()
+        public async Task StopDiscovery()
         {
             AppLog.Info("Stop discovery...");
+            await discovery.StopAsync();
         }
+
+        private void InitBroadcast()
+        {
+            discovery.OnPeerUp += ip => Dispatcher.UIThread.Post(() => Players.Add(ip.ToString()));
+            discovery.OnPeerDown += ip => Dispatcher.UIThread.Post(() => Players.Remove(ip.ToString()));            
+        }
+        
     }
 }
