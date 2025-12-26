@@ -89,7 +89,7 @@ namespace KobberLan.ViewModels
             WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4}";
         }
         
-        public void StartDiscovery()
+        public async Task StartDiscovery()
         {
             AppLog.Info("Starting discovery...");
             if (SelectedAdapter?.IPv4 == null)
@@ -97,9 +97,16 @@ namespace KobberLan.ViewModels
                 AppLog.Warn("SelectedAdapter is null, can't send broadcast");
                 return;
             }
-            
-            discovery.Start(SelectedAdapter.IPv4);
-            _ = discovery.BroadcastSearchAsync();
+
+            try
+            {
+                discovery.Start(SelectedAdapter.IPv4);
+                await discovery.BroadcastSearchAsync();
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("Error starting discovery", ex);
+            }
         }
         
         public async Task StopDiscovery()
