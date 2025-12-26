@@ -8,7 +8,7 @@
         x:Name="Main"
         x:Class="KobberLan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="avares://KobberLan/Assets/mesh0.ico"
+        Icon="{Binding WindowIcon}"
         Title="{Binding WindowTitle}">
 
     <DockPanel>

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
@@ -21,12 +22,17 @@ namespace KobberLan.ViewModels
         
         [ObservableProperty] private string windowTitle = "KobberLan";
         [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
+        [ObservableProperty] private WindowIcon? windowIcon;
         private readonly DiscoveryService discovery = new(port: 50000);
         
         public MainWindowViewModel()
         {
             var asm = typeof(App).Assembly.GetName().Name;
-            var uri = new Uri($"avares://{asm}/Assets/covermissing.jpg");
+            var uri = new Uri($"avares://{asm}/Assets/mesh0.ico");
+            WindowIcon = new WindowIcon(AssetLoader.Open(uri));
+            
+            //Todo: Temporary Dummy data, remove when implemented 
+            uri = new Uri($"avares://{asm}/Assets/covermissing.jpg");
             using var s = AssetLoader.Open(uri);
             var bmp = new Bitmap(s);
             
@@ -87,7 +93,13 @@ namespace KobberLan.ViewModels
         
         public void RefreshTitle()
         {
-            WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4}";
+            WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4} - Players: {Players.Count}";
+            
+            //Refresh icon
+            var asm = typeof(App).Assembly.GetName().Name;
+            var iconName = Players.Count <= 9 ? $"mesh{Players.Count}.ico" : "meshX.ico";
+            var uri = new Uri($"avares://{asm}/Assets/{iconName}");
+            WindowIcon = new WindowIcon(AssetLoader.Open(uri));
         }
         
         public async Task StartDiscovery()
