@@ -27,7 +27,7 @@ public static class NetworkAdapters
             }
             catch(Exception ex)
             {
-                AppLog.Error("Network adapters not found", ex);
+                AppLog.Error($"Failed to get IP properties for network adapter '{ni.Name}' (Id: {ni.Id})", ex);
                 continue;
             }
 
