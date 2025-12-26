@@ -138,7 +138,7 @@ public sealed class DiscoveryService : IAsyncDisposable
             }
             catch (Exception ex)
             {
-                AppLog.Error("Exception in listen loop.",ex);
+                AppLog.Error("Exception in listen loop.", ex);
                 break;
             }
 
