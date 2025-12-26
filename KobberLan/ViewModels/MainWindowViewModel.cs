@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -117,8 +118,32 @@ namespace KobberLan.ViewModels
 
         private void InitBroadcast()
         {
-            discovery.OnPeerUp += ip => Dispatcher.UIThread.Post(() => Players.Add(ip.ToString()));
-            discovery.OnPeerDown += ip => Dispatcher.UIThread.Post(() => Players.Remove(ip.ToString()));            
+            discovery.OnPeerUp += ip => Dispatcher.UIThread.Post(() => AddIp(ip));
+            discovery.OnPeerDown += ip => Dispatcher.UIThread.Post(() => RemoveIp(ip));     
+        }
+
+        private void AddIp(IPAddress ip)
+        {
+            if (Players.Contains(ip.ToString()))
+            {
+                AppLog.Warn("OnPeerUp, IP already exist: " + ip);
+            }
+            else
+            {
+                Players.Add(ip.ToString());
+            }
+        }
+
+        private void RemoveIp(IPAddress ip)
+        {
+            if (Players.Contains(ip.ToString()))
+            {
+                Players.Remove(ip.ToString());
+            }
+            else
+            {
+                AppLog.Warn("OnPeerDown, IP does not exist? " + ip);
+            }            
         }
         
     }
