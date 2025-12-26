@@ -144,23 +144,17 @@ public sealed class DiscoveryService : IAsyncDisposable
 
             var fromIp = res.RemoteEndPoint.Address;
             var msg = Encoding.ASCII.GetString(res.Buffer);
-            try
-            {
-                var respBytes = Encoding.ASCII.GetBytes(MSG_SEARCH);
-                await _listener.SendAsync(respBytes, respBytes.Length, res.RemoteEndPoint);
-            }
-            catch(Exception ex)
-            {
-                AppLog.Error("Exception in listen loop.", ex);
-            }
-
             HandleMessage(msg, fromIp);
         }
     }
 
     private void HandleMessage(string msg, IPAddress fromIp)
     {
-        if (_localIp is null) return;
+        if (_localIp is null)
+        {
+            AppLog.Warn("Local IP address is null.");
+            return;
+        }
 
         lock (_lock)
         {
