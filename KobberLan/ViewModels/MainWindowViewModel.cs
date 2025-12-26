@@ -102,6 +102,9 @@ namespace KobberLan.ViewModels
             WindowIcon = new WindowIcon(AssetLoader.Open(uri));
         }
         
+        public DiscoveryService GetDiscoveryService() => discovery;
+        
+        
         public async Task StartDiscovery()
         {
             AppLog.Info("Starting discovery...");

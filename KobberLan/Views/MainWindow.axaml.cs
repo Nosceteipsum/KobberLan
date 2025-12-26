@@ -27,6 +27,21 @@ namespace KobberLan.Views
                 AppLog.Error("About_Click exception.",ex);
             }
         }
+
+        private async void ResendBroadcast_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    await vm.GetDiscoveryService().BroadcastSearchAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("ResendBroadcast_Click exception.",ex);
+            }
+        }
         
         private async void Interface_Click(object? sender, RoutedEventArgs e)
         {

@@ -28,7 +28,7 @@
 
             <MenuItem Header="Network">
                 <MenuItem Header="Network interface" Click="Interface_Click"/>
-                <MenuItem Header="Resend broadcast"/>
+                <MenuItem Header="Resend broadcast" Click="ResendBroadcast_Click"/>
             </MenuItem>
           <MenuItem Header="About" Click="About_Click"/>
         </Menu>
