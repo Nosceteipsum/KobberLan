@@ -8,6 +8,8 @@
         x:Name="Main"
         x:Class="KobberLan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
+        Width="900"
+        Height="600"        
         Icon="{Binding WindowIcon}"
         Title="{Binding WindowTitle}">
 

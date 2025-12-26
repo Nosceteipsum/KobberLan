@@ -31,27 +31,6 @@ namespace KobberLan.ViewModels
             var uri = new Uri($"avares://{asm}/Assets/mesh0.ico");
             WindowIcon = new WindowIcon(AssetLoader.Open(uri));
             
-            //Todo: Temporary Dummy data, remove when implemented 
-            uri = new Uri($"avares://{asm}/Assets/covermissing.jpg");
-            using var s = AssetLoader.Open(uri);
-            var bmp = new Bitmap(s);
-            
-            Games.Add(new GameCard
-            {
-                Title = "Warcraft III",
-                Cover = bmp,
-                Likes = 0,
-                Players = 1
-            });
-            
-            Games.Add(new GameCard
-            {
-                Title = "Doom 2",
-                Cover = bmp,
-                Likes = 4,
-                Players = 2
-            });
-            
             RefreshAdapters();
             RefreshTitle();
             InitBroadcast();
