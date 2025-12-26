@@ -36,7 +36,7 @@
         <!-- Main content -->
         <ScrollViewer>
           <ItemsControl ItemsSource="{Binding Games}">
-            <!-- Wrap layout: cards flyder og “wrap’er” -->
+            <!-- Wrap layout -->
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>
                 <WrapPanel Orientation="Horizontal" />
@@ -108,8 +108,7 @@
             </ItemsControl.ItemTemplate>
           </ItemsControl>
         </ScrollViewer>
-        
-        
+      
     </DockPanel>
 
 </Window>

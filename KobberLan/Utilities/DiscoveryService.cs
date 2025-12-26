@@ -74,7 +74,7 @@ public sealed class DiscoveryService : IAsyncDisposable
         }
         catch { /* ignore shutdown errors */ }
 
-        _cts.Cancel();
+        await _cts.CancelAsync();
 
         try
         {
@@ -222,7 +222,9 @@ public sealed class DiscoveryService : IAsyncDisposable
         var bcBytes = new byte[4];
 
         for (int i = 0; i < 4; i++)
+        {
             bcBytes[i] = (byte)(ipBytes[i] | (maskBytes[i] ^ 255));
+        }
 
         return new IPAddress(bcBytes);
     }
