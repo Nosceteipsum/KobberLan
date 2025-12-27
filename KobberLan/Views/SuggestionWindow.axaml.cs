@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using KobberLan.Models;
 using KobberLan.ViewModels;
@@ -12,7 +13,6 @@ public partial class SuggestGameWindow : Window
     public SuggestGameWindow()
     {
         InitializeComponent();
-        Opened += (_, _) => (DataContext as SuggestGameWindowViewModel)?.RefreshCommand.Execute(null);
     }
 
     private void Ok_Click(object? sender, RoutedEventArgs e)
@@ -25,6 +25,16 @@ public partial class SuggestGameWindow : Window
         else
         {
             Close(false);
+        }
+    }
+
+    private void Game_DoubleTapped(object? sender, TappedEventArgs e)
+    {
+        // Hvis du dobbeltklikker på et cover, vælg og luk som OK
+        if (DataContext is SuggestGameWindowViewModel vm && vm.SelectedGame is not null)
+        {
+            Result = vm.SelectedGame;
+            Close(true);
         }
     }
 }
