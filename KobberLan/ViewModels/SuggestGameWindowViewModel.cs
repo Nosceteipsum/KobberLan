@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KobberLan.Models;
@@ -19,6 +20,8 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
 
     [ObservableProperty] private GameFolder? selectedFolder;
     [ObservableProperty] private LocalGame? selectedGame;
+    
+    private static readonly Bitmap FallbackCover = LoadFallbackCover();
 
     public SuggestGameWindowViewModel()
     {
@@ -56,15 +59,13 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     private static LocalGame MakeGame(string gameDir)
     {
         var key = Path.GetFileName(gameDir);
-        var title = key;
-        var cover = TryLoadCover(gameDir);
 
         return new LocalGame
         {
             Key = key,
-            Title = title,
+            Title = key,
             FolderPath = gameDir,
-            Cover = cover
+            Cover = TryLoadCover(gameDir)
         };
     }
     
@@ -124,26 +125,33 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
             };
         }
     }
-
-    private static Bitmap? TryLoadCover(string gameDir)
+    
+    private static Bitmap LoadFallbackCover()
     {
-        var candidates = new[]
-        {
-            Path.Combine(gameDir, "cover.jpg"),
-            Path.Combine(gameDir, "cover.jpeg"),
-            Path.Combine(gameDir, "cover.png"),
-            Path.Combine(gameDir, "cover.webp")
-        };
+        var asm = typeof(App).Assembly.GetName().Name;
+        var uri = new Uri($"avares://{asm}/Assets/covermissing.jpg");
+        using var s = AssetLoader.Open(uri);
+        return new Bitmap(s);
+    }    
 
-        var coverPath = candidates.FirstOrDefault(File.Exists);
-        if (coverPath is null) return null;
+    private static Bitmap TryLoadCover(string gameDir)
+    {
+        var coverPath = Path.Combine(gameDir, "_kobberlan.jpg");
 
-        try
+        if (File.Exists(coverPath))
         {
-            using var s = File.OpenRead(coverPath);
-            return new Bitmap(s);
+            try
+            {
+                using var s = File.OpenRead(coverPath);
+                return new Bitmap(s);
+            }
+            catch
+            {
+                return FallbackCover;
+            }
         }
-        catch { return null; }
+
+        return FallbackCover;
     }
 
     [RelayCommand]
