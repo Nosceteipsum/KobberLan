@@ -28,7 +28,6 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     [RelayCommand]
     private void Refresh()
     {
-        Folders.Clear();
         FilteredGames.Clear();
         SelectedGame = null;
 
@@ -36,18 +35,39 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
         if (!Directory.Exists(gamesRoot))
             return;
 
-        // "All games" folder (virtuel)
-        Folders.Add(new GameFolder("All games", gamesRoot, IsAll: true));
-
-        // Kategori-foldere direkte under Games\
-        foreach (var catDir in Directory.GetDirectories(gamesRoot).OrderBy(Path.GetFileName))
+        foreach (var gameDir in Directory.GetDirectories(gamesRoot).OrderBy(Path.GetFileName))
         {
-            var catName = Path.GetFileName(catDir);
-            Folders.Add(new GameFolder(catName, catDir));
+            // Ignorér ting der tydeligvis ikke er spil (valgfrit men smart)
+            if (IsIgnoredFolder(gameDir))
+                continue;
+
+            FilteredGames.Add(MakeGame(gameDir));
         }
 
-        SelectedFolder = Folders.FirstOrDefault();
+        SelectedGame = FilteredGames.FirstOrDefault();
     }
+
+    private static bool IsIgnoredFolder(string dir)
+    {
+        var name = Path.GetFileName(dir).ToLowerInvariant();
+        return name.StartsWith(".") || name.StartsWith("_");
+    }
+
+    private static LocalGame MakeGame(string gameDir)
+    {
+        var key = Path.GetFileName(gameDir);
+        var title = key;
+        var cover = TryLoadCover(gameDir);
+
+        return new LocalGame
+        {
+            Key = key,
+            Title = title,
+            FolderPath = gameDir,
+            Cover = cover
+        };
+    }
+    
 
     partial void OnSelectedFolderChanged(GameFolder? value)
     {
@@ -107,7 +127,6 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
 
     private static Bitmap? TryLoadCover(string gameDir)
     {
-        // Forsøg cover.* i folderen
         var candidates = new[]
         {
             Path.Combine(gameDir, "cover.jpg"),
@@ -124,10 +143,7 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
             using var s = File.OpenRead(coverPath);
             return new Bitmap(s);
         }
-        catch
-        {
-            return null;
-        }
+        catch { return null; }
     }
 
     [RelayCommand]

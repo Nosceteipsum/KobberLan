@@ -12,17 +12,7 @@
 
     <!-- Top bar -->
     <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10">
-      <TextBlock VerticalAlignment="Center" Text="Folder:"/>
-      <ComboBox Width="260"
-                ItemsSource="{Binding Folders}"
-                SelectedItem="{Binding SelectedFolder}">
-        <ComboBox.ItemTemplate>
-          <DataTemplate x:DataType="vm:GameFolder">
-            <TextBlock Text="{Binding Name}"/>
-          </DataTemplate>
-        </ComboBox.ItemTemplate>
-      </ComboBox>
-
+      <TextBlock VerticalAlignment="Center" Text="Games:"/>
       <Button Content="Refresh"
               Command="{Binding RefreshCommand}"/>
     </StackPanel>
@@ -37,84 +27,63 @@
       <Button Content="OK" IsDefault="True" Click="Ok_Click"/>
     </StackPanel>
 
-    <!-- Main area: left folders + right covers -->
-    <Grid ColumnDefinitions="220,*" ColumnSpacing="12" Margin="0,12,0,0">
+    <!-- Main area: cover grid -->
+    <Border BorderThickness="1" BorderBrush="#444" CornerRadius="6" Padding="10" Margin="0,12,0,0">
+      <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding FilteredGames}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
 
-      <!-- Left: folder list -->
-      <Border BorderThickness="1" BorderBrush="#444" CornerRadius="6" Padding="6">
-        <ListBox ItemsSource="{Binding Folders}"
-                 SelectedItem="{Binding SelectedFolder}">
-          <ListBox.ItemTemplate>
-            <DataTemplate x:DataType="vm:GameFolder">
-              <TextBlock Text="{Binding Name}" Margin="8,6"/>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:LocalGame">
+
+              <!-- Click to select, double-click to accept -->
+              <Button Padding="0"
+                      Margin="6"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      Command="{Binding $parent[Window].DataContext.SelectGameCommand}"
+                      CommandParameter="{Binding}"
+                      DoubleTapped="Game_DoubleTapped">
+
+                <Border Width="260"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        BorderBrush="#333"
+                        Background="#111"
+                        ClipToBounds="True">
+
+                  <Border.Styles>
+                    <!-- Hover effect -->
+                    <Style Selector="Border:pointerover">
+                      <Setter Property="BorderBrush" Value="#777"/>
+                    </Style>
+                  </Border.Styles>
+
+                  <StackPanel>
+                    <Border Height="150" ClipToBounds="True">
+                      <Image Source="{Binding Cover}"
+                             Stretch="UniformToFill"/>
+                    </Border>
+
+                    <TextBlock Text="{Binding Title}"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               Margin="8,8,8,10"/>
+                  </StackPanel>
+
+                </Border>
+              </Button>
+
             </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-      </Border>
+          </ItemsControl.ItemTemplate>
 
-      <!-- Right: cover grid -->
-      <Border Grid.Column="1" BorderThickness="1" BorderBrush="#444" CornerRadius="6" Padding="10">
-        <ScrollViewer>
-          <ItemsControl ItemsSource="{Binding FilteredGames}">
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <WrapPanel />
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
-              <DataTemplate x:DataType="models:LocalGame">
-
-                <!-- Make each cover selectable by click -->
-                <Button Padding="0"
-                        Margin="6"
-                        BorderThickness="0"
-                        Background="Transparent"
-                        Command="{Binding $parent[Window].DataContext.SelectGameCommand}"
-                        CommandParameter="{Binding}"
-                        DoubleTapped="Game_DoubleTapped">
-
-                  <Border Width="260"
-                          BorderThickness="1"
-                          CornerRadius="6"
-                          BorderBrush="{Binding $parent[Window].DataContext.SelectedGame, Converter={x:Null}}"
-                          Background="#111"
-                          ClipToBounds="True">
-
-                    <Border.Styles>
-                      <!-- hover effect -->
-                      <Style Selector="Border:pointerover">
-                        <Setter Property="BorderBrush" Value="#777"/>
-                      </Style>
-
-                      <!-- nice border default -->
-                      <Style Selector="Border">
-                        <Setter Property="BorderBrush" Value="#333"/>
-                      </Style>
-                    </Border.Styles>
-
-                    <StackPanel>
-                      <Border Height="150" ClipToBounds="True">
-                        <Image Source="{Binding Cover}"
-                               Stretch="UniformToFill"/>
-                      </Border>
-
-                      <TextBlock Text="{Binding Title}"
-                                 TextAlignment="Center"
-                                 FontWeight="Bold"
-                                 Margin="8,8,8,10"/>
-                    </StackPanel>
-                  </Border>
-                </Button>
-
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-
-          </ItemsControl>
-        </ScrollViewer>
-      </Border>
-
-    </Grid>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
 
   </DockPanel>
 </Window>
