@@ -15,26 +15,13 @@ public partial class SuggestGameWindow : Window
         InitializeComponent();
     }
 
-    private void Ok_Click(object? sender, RoutedEventArgs e)
+    private void Game_Click(object? sender, RoutedEventArgs e)
     {
         if (DataContext is SuggestGameWindowViewModel vm && vm.SelectedGame is not null)
         {
             Result = vm.SelectedGame;
             Close(true);
         }
-        else
-        {
-            Close(false);
-        }
-    }
+    }    
 
-    private void Game_DoubleTapped(object? sender, TappedEventArgs e)
-    {
-        // Hvis du dobbeltklikker på et cover, vælg og luk som OK
-        if (DataContext is SuggestGameWindowViewModel vm && vm.SelectedGame is not null)
-        {
-            Result = vm.SelectedGame;
-            Close(true);
-        }
-    }
 }

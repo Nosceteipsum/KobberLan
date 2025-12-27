@@ -17,16 +17,6 @@
               Command="{Binding RefreshCommand}"/>
     </StackPanel>
 
-    <!-- Bottom buttons -->
-    <StackPanel DockPanel.Dock="Bottom"
-                Orientation="Horizontal"
-                HorizontalAlignment="Right"
-                Spacing="10"
-                Margin="0,12,0,0">
-      <Button Content="Cancel" IsCancel="True"/>
-      <Button Content="OK" IsDefault="True" Click="Ok_Click"/>
-    </StackPanel>
-
     <!-- Main area: cover grid -->
     <Border BorderThickness="1" BorderBrush="#444" CornerRadius="6" Padding="10" Margin="0,12,0,0">
       <ScrollViewer>
@@ -40,14 +30,13 @@
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="models:LocalGame">
 
-              <!-- Click to select, double-click to accept -->
               <Button Padding="0"
                       Margin="6"
                       BorderThickness="0"
                       Background="Transparent"
                       Command="{Binding $parent[Window].DataContext.SelectGameCommand}"
                       CommandParameter="{Binding}"
-                      DoubleTapped="Game_DoubleTapped">
+                      Click="Game_Click">
 
                 <Border Width="260"
                         BorderThickness="1"
