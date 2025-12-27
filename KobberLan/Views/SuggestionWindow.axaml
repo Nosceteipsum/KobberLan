@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:KobberLan.ViewModels"
+        xmlns:models="clr-namespace:KobberLan.Models"
+        x:Class="KobberLan.Views.SuggestGameWindow"
+        x:DataType="vm:SuggestGameWindowViewModel"
+        Width="700" Height="450"
+        Title="Suggest a game"
+        CanResize="True"
+        WindowStartupLocation="CenterOwner">
+
+  <DockPanel Margin="12" LastChildFill="True">
+
+    <!-- Top -->
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10">
+      <TextBlock VerticalAlignment="Center" Text="Games folder:" />
+      <Button Content="Refresh" Command="{Binding RefreshCommand}" />
+    </StackPanel>
+
+    <!-- Bottom buttons -->
+    <StackPanel DockPanel.Dock="Bottom"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Spacing="10"
+                Margin="0,12,0,0">
+      <Button Content="Cancel" IsCancel="True" />
+      <Button Content="OK" IsDefault="True"
+              IsEnabled="{Binding SelectedGame, Converter={x:Static ObjectConverters.IsNotNull}}" 
+              Click="Ok_Click"/>
+    </StackPanel>
+
+    <!-- Main -->
+    <Grid ColumnDefinitions="2*,3*" Margin="0,12,0,0" ColumnSpacing="12">
+
+      <!-- List -->
+      <Border BorderThickness="1" BorderBrush="#444" CornerRadius="6" Padding="6">
+        <ListBox ItemsSource="{Binding Games}"
+                 SelectedItem="{Binding SelectedGame}">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="models:LocalGame">
+              <StackPanel Orientation="Horizontal" Spacing="10" Margin="4">
+                <Border Width="56" Height="56" BorderThickness="1" BorderBrush="#333" CornerRadius="4" ClipToBounds="True">
+                  <Image Source="{Binding Cover}" Stretch="UniformToFill"/>
+                </Border>
+                <StackPanel>
+                  <TextBlock FontWeight="Bold" Text="{Binding Title}"/>
+                  <TextBlock Opacity="0.7" FontSize="12" Text="{Binding Key}"/>
+                </StackPanel>
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Border>
+
+      <!-- Details -->
+      <Border Grid.Column="1" BorderThickness="1" BorderBrush="#444" CornerRadius="6" Padding="10">
+        <StackPanel Spacing="8">
+          <TextBlock FontSize="18" FontWeight="Bold" Text="{Binding SelectedGame.Title}"/>
+          <TextBlock Opacity="0.7" Text="{Binding SelectedGame.FolderPath}"/>
+
+          <Border Height="240" BorderThickness="1" BorderBrush="#333" CornerRadius="6" ClipToBounds="True">
+            <Image Source="{Binding SelectedGame.Cover}" Stretch="Uniform"/>
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </Grid>
+
+  </DockPanel>
+</Window>

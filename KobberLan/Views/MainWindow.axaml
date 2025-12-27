@@ -23,7 +23,7 @@
             </MenuItem>
 
             <MenuItem Header="Suggest">
-                <MenuItem Header="Suggest game" />
+                <MenuItem Header="Suggest game" Click="SuggestGame_Click" />
                 <MenuItem Header="Suggest game from HDD" />
                 <MenuItem Header="Suggest game from Internet" />
             </MenuItem>

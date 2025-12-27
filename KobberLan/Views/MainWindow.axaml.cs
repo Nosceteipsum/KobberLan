@@ -43,6 +43,29 @@ namespace KobberLan.Views
             }
         }
         
+        private async void SuggestGame_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var w = new SuggestGameWindow
+                {
+                    DataContext = new SuggestGameWindowViewModel()
+                };
+
+                var ok = await w.ShowDialog<bool>(this);
+                if (ok && w.Result is not null)
+                {
+                    // Todo: Her har du valgt et spil (w.Result)
+                    // Todo: Næste step: send DTO_Suggestion broadcast
+                    // Todo: fx: (DataContext as MainWindowViewModel)?.SuggestGame(w.Result);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("SuggestGame_Click exception.",ex);
+            }
+        }        
+        
         private async void Interface_Click(object? sender, RoutedEventArgs e)
         {
             try

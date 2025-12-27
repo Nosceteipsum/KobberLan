@@ -37,6 +37,10 @@
       <DependentUpon>LogWindow.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\SuggestionWindow.axaml.cs">
+      <DependentUpon>SuggestionWindow.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   
 </Project>
