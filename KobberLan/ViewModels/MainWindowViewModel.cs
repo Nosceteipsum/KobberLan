@@ -114,24 +114,41 @@ namespace KobberLan.ViewModels
             }
 
             AppLog.Info("Start game: " + game.Title + " Folder: " + game.FolderPath);
-
-            var cfg = TryLoadFromGameFolder(game.FolderPath);
-            var startGame = cfg?.StartGame;
-            if (string.IsNullOrWhiteSpace(startGame))
+            string startGameFullPath;
+            try
             {
-                AppLog.Error("Could not read StartGame from json setting, _kobberlan.config");           
+                var cfg = TryLoadFromGameFolder(game.FolderPath);
+                var startGame = cfg?.StartGame;
+                if (string.IsNullOrWhiteSpace(startGame))
+                {
+                    AppLog.Error("Could not read StartGame from json setting, _kobberlan.config");
+                    return;
+                }
+                startGameFullPath = game.FolderPath + "/" + startGame;
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("Error reading game data from config, _kobberlan.config", ex);
+                return;
             }
 
-            string startGameFullPath = game.FolderPath + "/" + startGame;
             AppLog.Info("Start game process, filename: " + startGameFullPath);
-            var psi = new ProcessStartInfo
+            try
             {
-                FileName = startGameFullPath,
-                WorkingDirectory = game.FolderPath,
-                UseShellExecute = true,
-            };
+                var psi = new ProcessStartInfo
+                {
+                    FileName = startGameFullPath,
+                    WorkingDirectory = game.FolderPath,
+                    UseShellExecute = true,
+                };
 
-            Process.Start(psi);            
+                Process.Start(psi);
+
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("Error start game process.", ex);
+            }
         }
 
         private bool CanPlay(GameCard? game) => game is not null;        
