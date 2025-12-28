@@ -41,19 +41,26 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
         if (!Directory.Exists(root))
             return;
 
-        // All + Uncategorized
-        Folders.Add(new GameFolder("All games", root, FolderKind.All));
-        Folders.Add(new GameFolder("Uncategorized", root, FolderKind.Uncategorized));
+        // Find uncategorized games (direkte under Games\)
+        var hasUncategorized = Directory.GetDirectories(root).Any(IsGameFolder);
 
-        // Kategorier = mapper under Games\ som ikke selv er spil
+        // All games er altid
+        Folders.Add(new GameFolder("All games", root, FolderKind.All));
+
+        // Kun hvis der faktisk er spil direkte under Games\
+        if (hasUncategorized)
+            Folders.Add(new GameFolder("Uncategorized", root, FolderKind.Uncategorized));
+
+        // Kategorier = mapper under Games\ som ikke selv er et spil (ingen _kobberlan.jpg)
         foreach (var dir in Directory.GetDirectories(root).OrderBy(Path.GetFileName))
         {
-            if (IsGameFolder(dir)) continue;           // spil direkte under Games\
+            if (IsGameFolder(dir)) continue; // spil direkte under Games\
             Folders.Add(new GameFolder(Path.GetFileName(dir), dir, FolderKind.Category));
         }
 
         SelectedFolder = Folders.FirstOrDefault();
     }
+
 
 
     private static bool IsIgnoredFolder(string dir)
@@ -117,17 +124,25 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     
     private static IEnumerable<string> GetAllGameFolders(string root)
     {
-        // Uncategorized
-        foreach (var g in GetUncategorizedGameFolders(root))
-            yield return g;
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        // Hver kategori, 1 niveau dybt
+        // 1) Uncategorized
+        foreach (var dir in Directory.GetDirectories(root))
+        {
+            if (IsGameFolder(dir) && seen.Add(dir))
+                yield return dir;
+        }
+
+        // 2) Kategorier (kun 1 niveau dybt)
         foreach (var cat in Directory.GetDirectories(root))
         {
-            if (IsGameFolder(cat)) continue; // allerede uncategorized
+            if (IsGameFolder(cat)) continue; // allerede et spil, ikke en kategori
 
-            foreach (var g in GetCategoryGameFolders(cat))
-                yield return g;
+            foreach (var dir in Directory.GetDirectories(cat))
+            {
+                if (IsGameFolder(dir) && seen.Add(dir))
+                    yield return dir;
+            }
         }
     }
     
