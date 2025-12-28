@@ -99,10 +99,24 @@ namespace KobberLan.ViewModels
 
         [RelayCommand]
         private void Clear(GameCard game) { /* ... */ }
+        
+        [RelayCommand(CanExecute = nameof(CanPlay))]
+        private void Play(LocalGame? game)
+        {
+            if (game is null)
+            {
+                AppLog.Error("game is null");
+                return;
+            }
 
-        [RelayCommand]
-        private void Play(GameCard game) { /* ... */ }
+            AppLog.Info("Start game: " + game.Title);
+            //StartProcess(game.FolderPath);
 
+            // Brug game.FolderPath, game.Title, osv.
+            // fx: StartProcess(game.FolderPath) / send UDP / whatever
+        }
+
+        private bool CanPlay(LocalGame? game) => game is not null;        
         
         public void RefreshTitle()
         {

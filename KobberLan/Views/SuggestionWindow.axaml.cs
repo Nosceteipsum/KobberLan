@@ -20,6 +20,6 @@ public partial class SuggestGameWindow : Window
             Result = game;
             Close(true);
         }
-    }    
+    }
 
 }

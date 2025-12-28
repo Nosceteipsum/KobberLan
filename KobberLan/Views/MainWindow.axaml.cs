@@ -79,9 +79,10 @@ namespace KobberLan.Views
             }
         }
         
-        private void ShowLog_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void ShowLog_Click(object? sender, RoutedEventArgs e)
         {
             new LogWindow().ShowDialog(this);
-        }        
+        }
+
     }
 }
