@@ -61,6 +61,8 @@ namespace KobberLan.ViewModels
             Games.Add(new GameCard
             {
                 Title = game.Title,
+                Key = game.Key,
+                FolderPath =  game.FolderPath,
                 Cover = bmp,
                 Likes = 0,
                 Players = 1
@@ -101,7 +103,7 @@ namespace KobberLan.ViewModels
         private void Clear(GameCard game) { /* ... */ }
         
         [RelayCommand(CanExecute = nameof(CanPlay))]
-        private void Play(LocalGame? game)
+        private void Play(GameCard? game)
         {
             if (game is null)
             {
@@ -116,7 +118,7 @@ namespace KobberLan.ViewModels
             // fx: StartProcess(game.FolderPath) / send UDP / whatever
         }
 
-        private bool CanPlay(LocalGame? game) => game is not null;        
+        private bool CanPlay(GameCard? game) => game is not null;        
         
         public void RefreshTitle()
         {
