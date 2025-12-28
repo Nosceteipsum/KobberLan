@@ -11,10 +11,12 @@ using KobberLan.Models;
 
 namespace KobberLan.ViewModels;
 
-public record GameFolder(string Name, string Path, bool IsAll = false);
+public record GameFolder(string Name, string Path, SuggestGameWindowViewModel.FolderKind Kind);
 
 public partial class SuggestGameWindowViewModel : ViewModelBase
 {
+    public enum FolderKind { All, Uncategorized, Category }
+    
     public ObservableCollection<GameFolder> Folders { get; } = new();
     public ObservableCollection<LocalGame> FilteredGames { get; } = new();
 
@@ -31,24 +33,28 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     [RelayCommand]
     private void Refresh()
     {
+        Folders.Clear();
         FilteredGames.Clear();
         SelectedGame = null;
 
-        var gamesRoot = Path.Combine(AppContext.BaseDirectory, "Games");
-        if (!Directory.Exists(gamesRoot))
+        var root = Path.Combine(AppContext.BaseDirectory, "Games");
+        if (!Directory.Exists(root))
             return;
 
-        foreach (var gameDir in Directory.GetDirectories(gamesRoot).OrderBy(Path.GetFileName))
-        {
-            // Ignorér ting der tydeligvis ikke er spil (valgfrit men smart)
-            if (IsIgnoredFolder(gameDir))
-                continue;
+        // All + Uncategorized
+        Folders.Add(new GameFolder("All games", root, FolderKind.All));
+        Folders.Add(new GameFolder("Uncategorized", root, FolderKind.Uncategorized));
 
-            FilteredGames.Add(MakeGame(gameDir));
+        // Kategorier = mapper under Games\ som ikke selv er spil
+        foreach (var dir in Directory.GetDirectories(root).OrderBy(Path.GetFileName))
+        {
+            if (IsGameFolder(dir)) continue;           // spil direkte under Games\
+            Folders.Add(new GameFolder(Path.GetFileName(dir), dir, FolderKind.Category));
         }
 
-        SelectedGame = FilteredGames.FirstOrDefault();
+        SelectedFolder = Folders.FirstOrDefault();
     }
+
 
     private static bool IsIgnoredFolder(string dir)
     {
@@ -74,18 +80,57 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     {
         FilteredGames.Clear();
         SelectedGame = null;
-
         if (value is null) return;
 
-        var games = value.IsAll
-            ? LoadAllGames(value.Path)
-            : LoadGamesInFolder(value.Path);
+        IEnumerable<string> gameDirs = value.Kind switch
+        {
+            FolderKind.All => GetAllGameFolders(value.Path),
+            FolderKind.Uncategorized => GetUncategorizedGameFolders(value.Path),
+            FolderKind.Category => GetCategoryGameFolders(value.Path),
+            _ => Enumerable.Empty<string>()
+        };
 
-        foreach (var g in games)
-            FilteredGames.Add(g);
+        foreach (var dir in gameDirs)
+            FilteredGames.Add(MakeGame(dir));
 
         SelectedGame = FilteredGames.FirstOrDefault();
     }
+
+    private static IEnumerable<string> GetUncategorizedGameFolders(string root)
+    {
+        foreach (var dir in Directory.GetDirectories(root))
+            if (IsGameFolder(dir))
+                yield return dir;
+    }
+
+    private static IEnumerable<string> GetCategoryGameFolders(string categoryDir)
+    {
+        foreach (var dir in Directory.GetDirectories(categoryDir))
+            if (IsGameFolder(dir))
+                yield return dir;
+    }
+
+    private static bool IsGameFolder(string dir)
+    {
+        return File.Exists(Path.Combine(dir, "_kobberlan.jpg"));
+    }
+    
+    private static IEnumerable<string> GetAllGameFolders(string root)
+    {
+        // Uncategorized
+        foreach (var g in GetUncategorizedGameFolders(root))
+            yield return g;
+
+        // Hver kategori, 1 niveau dybt
+        foreach (var cat in Directory.GetDirectories(root))
+        {
+            if (IsGameFolder(cat)) continue; // allerede uncategorized
+
+            foreach (var g in GetCategoryGameFolders(cat))
+                yield return g;
+        }
+    }
+    
 
     private static IEnumerable<LocalGame> LoadAllGames(string gamesRoot)
     {
