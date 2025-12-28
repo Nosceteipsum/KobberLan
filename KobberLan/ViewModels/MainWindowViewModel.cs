@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace KobberLan.ViewModels
         [ObservableProperty] private string windowTitle = "KobberLan";
         [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
         [ObservableProperty] private WindowIcon? windowIcon;
+        [ObservableProperty] private LocalGame? selectedSuggestedGame;        
         private readonly DiscoveryService discovery = new(port: 50000);
         
         public MainWindowViewModel()
@@ -35,6 +37,38 @@ namespace KobberLan.ViewModels
             RefreshTitle();
             InitBroadcast();
         }
+        
+        public void SuggestGame(LocalGame game)
+        {
+            SelectedSuggestedGame = game;
+
+            //Show game cover
+            var coverPath = Path.Combine(game.FolderPath, "_kobberlan.jpg");
+
+            Bitmap? bmp = null;
+            if (File.Exists(coverPath))
+            {
+                using var fs = File.OpenRead(coverPath);
+                bmp = new Bitmap(fs);
+            }
+            else
+            {
+                // fallback asset
+                using var s = AssetLoader.Open(new Uri("avares://KobberLan/Assets/covermissing.jpg"));
+                bmp = new Bitmap(s);
+            }
+            
+            Games.Add(new GameCard
+            {
+                Title = game.Title,
+                Cover = bmp,
+                Likes = 0,
+                Players = 1
+            });
+            
+            // todo: UDP broadcast new game
+            
+        }        
         
         [RelayCommand]
         private void RefreshAdapters()

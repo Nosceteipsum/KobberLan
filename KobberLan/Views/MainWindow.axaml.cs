@@ -55,9 +55,7 @@ namespace KobberLan.Views
                 var ok = await w.ShowDialog<bool>(this);
                 if (ok && w.Result is not null)
                 {
-                    // Todo: Her har du valgt et spil (w.Result)
-                    // Todo: Næste step: send DTO_Suggestion broadcast
-                    // Todo: fx: (DataContext as MainWindowViewModel)?.SuggestGame(w.Result);
+                    (DataContext as MainWindowViewModel)?.SuggestGame(w.Result);
                 }
             }
             catch (Exception ex)
