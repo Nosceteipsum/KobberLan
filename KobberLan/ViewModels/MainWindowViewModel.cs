@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
@@ -111,14 +113,43 @@ namespace KobberLan.ViewModels
                 return;
             }
 
-            AppLog.Info("Start game: " + game.Title);
-            //StartProcess(game.FolderPath);
+            AppLog.Info("Start game: " + game.Title + " Folder: " + game.FolderPath);
 
-            // Brug game.FolderPath, game.Title, osv.
-            // fx: StartProcess(game.FolderPath) / send UDP / whatever
+            var cfg = TryLoadFromGameFolder(game.FolderPath);
+            var startGame = cfg?.StartGame;
+            if (string.IsNullOrWhiteSpace(startGame))
+            {
+                AppLog.Error("Could not read StartGame from json setting, _kobberlan.config");           
+            }
+
+            string startGameFullPath = game.FolderPath + "/" + startGame;
+            AppLog.Info("Start game process, filename: " + startGameFullPath);
+            var psi = new ProcessStartInfo
+            {
+                FileName = startGameFullPath,
+                WorkingDirectory = game.FolderPath,
+                UseShellExecute = true,
+            };
+
+            Process.Start(psi);            
         }
 
         private bool CanPlay(GameCard? game) => game is not null;        
+        
+        private static readonly JsonSerializerOptions Options = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
+        };
+        
+        public static KobberLanConfig? TryLoadFromGameFolder(string gameFolder)
+        {
+            var path = Path.Combine(gameFolder, "_kobberlan.config");
+            if (!File.Exists(path)) return null;
+
+            var json = File.ReadAllText(path);
+            return JsonSerializer.Deserialize<KobberLanConfig>(json, Options);
+        }        
         
         public void RefreshTitle()
         {
