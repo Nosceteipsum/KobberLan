@@ -44,7 +44,6 @@
                       Margin="6"
                       BorderThickness="0"
                       Background="Transparent"
-                      Command="{Binding $parent[Window].DataContext.SelectGameCommand}"
                       CommandParameter="{Binding}"
                       Click="Game_Click">
 

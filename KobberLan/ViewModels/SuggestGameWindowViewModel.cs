@@ -62,13 +62,6 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     }
 
 
-
-    private static bool IsIgnoredFolder(string dir)
-    {
-        var name = Path.GetFileName(dir).ToLowerInvariant();
-        return name.StartsWith(".") || name.StartsWith("_");
-    }
-
     private static LocalGame MakeGame(string gameDir)
     {
         var key = Path.GetFileName(gameDir);
@@ -143,46 +136,6 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
                 if (IsGameFolder(dir) && seen.Add(dir))
                     yield return dir;
             }
-        }
-    }
-    
-
-    private static IEnumerable<LocalGame> LoadAllGames(string gamesRoot)
-    {
-        // All games = alle spil-foldere i alle kategori-foldere + eventuelle direkte under Games\
-        // 1) Spil direkte under Games\
-        foreach (var g in LoadGamesInFolder(gamesRoot))
-            yield return g;
-
-        // 2) Spil under kategori-foldere
-        foreach (var catDir in Directory.GetDirectories(gamesRoot))
-        {
-            foreach (var g in LoadGamesInFolder(catDir))
-                yield return g;
-        }
-    }
-
-    private static IEnumerable<LocalGame> LoadGamesInFolder(string folder)
-    {
-        // Antag: hver spil ligger som subfolder i den valgte folder
-        // fx Games\Strategy\Warcraft3\...
-        if (!Directory.Exists(folder))
-            yield break;
-
-        foreach (var gameDir in Directory.GetDirectories(folder).OrderBy(Path.GetFileName))
-        {
-            var key = Path.GetFileName(gameDir);
-            var title = key; // v1: senere kan du læse titel fra config.json i folderen
-
-            var cover = TryLoadCover(gameDir);
-
-            yield return new LocalGame
-            {
-                Key = key,
-                Title = title,
-                FolderPath = gameDir,
-                Cover = cover
-            };
         }
     }
     
