@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
 using Avalonia.Controls;
@@ -15,14 +16,14 @@ namespace KobberLan.ViewModels
     public partial class MainWindowViewModel : ViewModelBase
     {
         public ObservableCollection<GameCard> Games { get; } = new();
+        public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = new();
         
         [ObservableProperty] private string windowTitle = "KobberLan";
         [ObservableProperty] private WindowIcon? windowIcon;
         [ObservableProperty] private LocalGame? selectedSuggestedGame;        
         [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
 
-        public ObservableCollection<string> PlayerIps { get; } = new();
-        public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = new();
+        private List<string> PlayerIps { get; } = new();
         
         private readonly IGameConfigService gameConfigService;
         private readonly ICoverService coverService;
