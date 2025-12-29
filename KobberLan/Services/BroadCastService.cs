@@ -41,7 +41,7 @@ public class BroadCastService : IBroadCastService, IAsyncDisposable
 
     private List<string> PlayerIps { get; } = new();
     
-    private readonly int _port = 5000;
+    private readonly int _port = 50000;
 
     public BroadCastService(ObservableCollection<NetworkAdapterInfo> adapters)
     {

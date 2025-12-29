@@ -39,7 +39,7 @@ public class GameConfigService : IGameConfigService
             return  string.Empty;
         }
         
-        return gameFolder + "/" + kobberLanConfig.StartGame;
+        return Path.Combine(gameFolder, kobberLanConfig.StartGame);
     }
     
     private static readonly JsonSerializerOptions Options = new()
