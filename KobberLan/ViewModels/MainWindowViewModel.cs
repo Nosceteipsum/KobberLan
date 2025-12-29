@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Threading;
@@ -16,26 +14,27 @@ namespace KobberLan.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        public ObservableCollection<string> Players { get; } = new();
-        public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = new();
         public ObservableCollection<GameCard> Games { get; } = new();
         
         [ObservableProperty] private string windowTitle = "KobberLan";
-        [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
         [ObservableProperty] private WindowIcon? windowIcon;
         [ObservableProperty] private LocalGame? selectedSuggestedGame;        
-        
-        private readonly DiscoveryService discovery = new(port: 50000);
+        [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
+
+        public ObservableCollection<string> Players { get; } = new();
+        public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = new();
         
         private readonly IGameConfigService gameConfigService;
         private readonly ICoverService coverService;
         private readonly IGameLauncher gameLauncher;
+        private readonly IBroadCastService broadCastService;
         
         public MainWindowViewModel()
         {
             gameConfigService = new GameConfigService();
             coverService = new CoverService();
             gameLauncher = new GameLauncher();
+            broadCastService = new BroadCastService(Adapters);
             
             var asm = typeof(App).Assembly.GetName().Name;
             var uri = new Uri($"avares://{asm}/Assets/mesh0.ico");
@@ -45,6 +44,11 @@ namespace KobberLan.ViewModels
             RefreshTitle();
             InitBroadcast();
         }
+        
+        partial void OnSelectedAdapterChanged(NetworkAdapterInfo? value)
+        {
+            broadCastService.SelectedAdapter = value;
+        }        
         
         public void SuggestGame(LocalGame game)
         {
@@ -64,25 +68,7 @@ namespace KobberLan.ViewModels
         }        
         
         [RelayCommand]
-        private void RefreshAdapters()
-        {
-            Adapters.Clear();
-            foreach (var adapterInfo in NetworkAdapters.GetUsableIPv4Adapters())
-            {
-                Adapters.Add(adapterInfo);
-            }
-
-            if (SelectedAdapter is not null)
-            {
-                var stillThere = Adapters.FirstOrDefault(x => x.Id == SelectedAdapter.Id);
-                if (stillThere is not null)
-                {
-                    SelectedAdapter = stillThere;
-                }
-            }
-
-            SelectedAdapter ??= Adapters.FirstOrDefault();
-        }        
+        private void RefreshAdapters() => broadCastService.RefreshAdapters();
         
         [RelayCommand]
         private void Like(GameCard game) => game.Likes++;
@@ -120,39 +106,12 @@ namespace KobberLan.ViewModels
             WindowIcon = new WindowIcon(AssetLoader.Open(uri));
         }
         
-        public DiscoveryService GetDiscoveryService() => discovery;
+        public IBroadCastService GetBroadCastService() => broadCastService;
         
-        
-        public async Task StartDiscovery()
-        {
-            AppLog.Info("Starting discovery...");
-            if (SelectedAdapter?.IPv4 == null)
-            {
-                AppLog.Warn("SelectedAdapter is null, can't send broadcast");
-                return;
-            }
-
-            try
-            {
-                discovery.Start(SelectedAdapter.IPv4);
-                await discovery.BroadcastSearchAsync();
-            }
-            catch (Exception ex)
-            {
-                AppLog.Error("Error starting discovery", ex);
-            }
-        }
-        
-        public async Task StopDiscovery()
-        {
-            AppLog.Info("Stop discovery...");
-            await discovery.StopAsync();
-        }
-
         private void InitBroadcast()
         {
-            discovery.OnPeerUp += ip => Dispatcher.UIThread.Post(() => AddIp(ip));
-            discovery.OnPeerDown += ip => Dispatcher.UIThread.Post(() => RemoveIp(ip));     
+            broadCastService.OnPeerUp += ip => Dispatcher.UIThread.Post(() => AddIp(ip));
+            broadCastService.OnPeerDown += ip => Dispatcher.UIThread.Post(() => RemoveIp(ip));     
         }
 
         private void AddIp(IPAddress ip)

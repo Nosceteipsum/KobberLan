@@ -11,8 +11,8 @@ namespace KobberLan.Views
         public MainWindow()
         {
             InitializeComponent();
-            Opened += (_, _) => (DataContext as MainWindowViewModel)?.StartDiscovery();
-            Closed += (_, _) => (DataContext as MainWindowViewModel)?.StopDiscovery();            
+            Opened += (_, _) => (DataContext as MainWindowViewModel)?.GetBroadCastService().StartDiscovery();
+            Closed += (_, _) => (DataContext as MainWindowViewModel)?.GetBroadCastService().StopDiscovery();            
         }
         
         private async void About_Click(object? sender, RoutedEventArgs e)
@@ -34,7 +34,7 @@ namespace KobberLan.Views
             {
                 if (DataContext is MainWindowViewModel vm)
                 {
-                    await vm.GetDiscoveryService().BroadcastSearchAsync();
+                    await vm.GetBroadCastService().BroadcastSearchAsync();
                 }
             }
             catch (Exception ex)
