@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -30,11 +29,13 @@ namespace KobberLan.ViewModels
         
         private readonly IGameConfigService gameConfigService;
         private readonly ICoverService coverService;
+        private readonly IGameLauncher gameLauncher;
         
         public MainWindowViewModel()
         {
             gameConfigService = new GameConfigService();
             coverService = new CoverService();
+            gameLauncher = new GameLauncher();
             
             var asm = typeof(App).Assembly.GetName().Name;
             var uri = new Uri($"avares://{asm}/Assets/mesh0.ico");
@@ -103,25 +104,7 @@ namespace KobberLan.ViewModels
 
             AppLog.Info("Start game: " + game.Title + " Folder: " + game.FolderPath);
             gameConfigService.TryLoad(game.FolderPath);
-            var startGameFullPath = gameConfigService.GetGameFullPath();
-            
-            AppLog.Info("Start game process, filename: " + startGameFullPath);
-            try
-            {
-                var psi = new ProcessStartInfo
-                {
-                    FileName = startGameFullPath,
-                    WorkingDirectory = game.FolderPath,
-                    UseShellExecute = true,
-                };
-
-                Process.Start(psi);
-
-            }
-            catch (Exception ex)
-            {
-                AppLog.Error("Error start game process.", ex);
-            }
+            gameLauncher.Play(game.FolderPath, gameConfigService.GetGameFullPath());
         }
 
         private bool CanPlay(GameCard? game) => game is not null;        
