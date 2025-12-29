@@ -21,7 +21,7 @@ namespace KobberLan.ViewModels
         [ObservableProperty] private LocalGame? selectedSuggestedGame;        
         [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
 
-        public ObservableCollection<string> Players { get; } = new();
+        public ObservableCollection<string> PlayerIps { get; } = new();
         public ObservableCollection<NetworkAdapterInfo> Adapters { get; } = new();
         
         private readonly IGameConfigService gameConfigService;
@@ -97,11 +97,11 @@ namespace KobberLan.ViewModels
         
         public void RefreshTitle()
         {
-            WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4} - Players: {Players.Count}";
+            WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4} - Players: {PlayerIps.Count}";
             
             //Refresh icon
             var asm = typeof(App).Assembly.GetName().Name;
-            var iconName = Players.Count <= 9 ? $"mesh{Players.Count}.ico" : "meshX.ico";
+            var iconName = PlayerIps.Count <= 9 ? $"mesh{PlayerIps.Count}.ico" : "meshX.ico";
             var uri = new Uri($"avares://{asm}/Assets/{iconName}");
             WindowIcon = new WindowIcon(AssetLoader.Open(uri));
         }
@@ -110,27 +110,27 @@ namespace KobberLan.ViewModels
         
         private void InitBroadcast()
         {
-            broadCastService.OnPeerUp += ip => Dispatcher.UIThread.Post(() => AddIp(ip));
-            broadCastService.OnPeerDown += ip => Dispatcher.UIThread.Post(() => RemoveIp(ip));     
+            broadCastService.OnPeerUp += ip => Dispatcher.UIThread.Post(() => AddPlayerIp(ip));
+            broadCastService.OnPeerDown += ip => Dispatcher.UIThread.Post(() => RemovePlayerIp(ip));     
         }
 
-        private void AddIp(IPAddress ip)
+        private void AddPlayerIp(IPAddress ip)
         {
-            if (Players.Contains(ip.ToString()))
+            if (PlayerIps.Contains(ip.ToString()))
             {
                 AppLog.Warn("OnPeerUp, IP already exist: " + ip);
             }
             else
             {
-                Players.Add(ip.ToString());
+                PlayerIps.Add(ip.ToString());
             }
         }
 
-        private void RemoveIp(IPAddress ip)
+        private void RemovePlayerIp(IPAddress ip)
         {
-            if (Players.Contains(ip.ToString()))
+            if (PlayerIps.Contains(ip.ToString()))
             {
-                Players.Remove(ip.ToString());
+                PlayerIps.Remove(ip.ToString());
             }
             else
             {
