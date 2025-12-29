@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
@@ -13,6 +12,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KobberLan.Models;
+using KobberLan.Services;
 using KobberLan.Utilities;
 
 namespace KobberLan.ViewModels
@@ -27,10 +27,14 @@ namespace KobberLan.ViewModels
         [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
         [ObservableProperty] private WindowIcon? windowIcon;
         [ObservableProperty] private LocalGame? selectedSuggestedGame;        
+        
         private readonly DiscoveryService discovery = new(port: 50000);
+        private readonly IGameConfigService gameConfigService;
         
         public MainWindowViewModel()
         {
+            gameConfigService = new GameConfigService();
+            
             var asm = typeof(App).Assembly.GetName().Name;
             var uri = new Uri($"avares://{asm}/Assets/mesh0.ico");
             WindowIcon = new WindowIcon(AssetLoader.Open(uri));
@@ -114,24 +118,9 @@ namespace KobberLan.ViewModels
             }
 
             AppLog.Info("Start game: " + game.Title + " Folder: " + game.FolderPath);
-            string startGameFullPath;
-            try
-            {
-                var cfg = TryLoadFromGameFolder(game.FolderPath);
-                var startGame = cfg?.StartGame;
-                if (string.IsNullOrWhiteSpace(startGame))
-                {
-                    AppLog.Error("Could not read StartGame from json setting, _kobberlan.config");
-                    return;
-                }
-                startGameFullPath = game.FolderPath + "/" + startGame;
-            }
-            catch (Exception ex)
-            {
-                AppLog.Error("Error reading game data from config, _kobberlan.config", ex);
-                return;
-            }
-
+            gameConfigService.TryLoad(game.FolderPath);
+            var startGameFullPath = gameConfigService.GetGameFullPath();
+            
             AppLog.Info("Start game process, filename: " + startGameFullPath);
             try
             {
@@ -152,21 +141,6 @@ namespace KobberLan.ViewModels
         }
 
         private bool CanPlay(GameCard? game) => game is not null;        
-        
-        private static readonly JsonSerializerOptions Options = new()
-        {
-            PropertyNameCaseInsensitive = true,
-            NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
-        };
-        
-        public static KobberLanConfig? TryLoadFromGameFolder(string gameFolder)
-        {
-            var path = Path.Combine(gameFolder, "_kobberlan.config");
-            if (!File.Exists(path)) return null;
-
-            var json = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<KobberLanConfig>(json, Options);
-        }        
         
         public void RefreshTitle()
         {
