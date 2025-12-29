@@ -23,7 +23,7 @@ public class CoverService : ICoverService
         }
         catch (Exception ex)
         {
-            AppLog.Error($"Game{game.Title} cover load error", ex);
+            AppLog.Error($"Game {game.Title} cover load error", ex);
         }
 
         using var s = AssetLoader.Open(new Uri("avares://KobberLan/Assets/covermissing.jpg"));
