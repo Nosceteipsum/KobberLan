@@ -8,6 +8,7 @@ using Avalonia.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using KobberLan.Models;
+using KobberLan.Utilities;
 
 namespace KobberLan.ViewModels;
 
@@ -39,19 +40,18 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
 
         var root = Path.Combine(AppContext.BaseDirectory, "Games");
         if (!Directory.Exists(root))
+        {
+            AppLog.Error("Game folder not found");
             return;
+        }
 
-        // Find uncategorized games (direkte under Games\)
         var hasUncategorized = Directory.GetDirectories(root).Any(IsGameFolder);
-
-        // All games er altid
         Folders.Add(new GameFolder("All games", root, FolderKind.All));
-
-        // Kun hvis der faktisk er spil direkte under Games\
         if (hasUncategorized)
+        {
             Folders.Add(new GameFolder("Uncategorized", root, FolderKind.Uncategorized));
+        }
 
-        // Kategorier = mapper under Games\ som ikke selv er et spil (ingen _kobberlan.jpg)
         foreach (var dir in Directory.GetDirectories(root).OrderBy(Path.GetFileName))
         {
             if (IsGameFolder(dir)) continue; // spil direkte under Games\
@@ -65,7 +65,6 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     private static LocalGame MakeGame(string gameDir)
     {
         var key = Path.GetFileName(gameDir);
-
         return new LocalGame
         {
             Key = key,
@@ -91,7 +90,9 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
         };
 
         foreach (var dir in gameDirs)
+        {
             FilteredGames.Add(MakeGame(dir));
+        }
 
         SelectedGame = FilteredGames.FirstOrDefault();
     }
@@ -106,8 +107,12 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     private static IEnumerable<string> GetCategoryGameFolders(string categoryDir)
     {
         foreach (var dir in Directory.GetDirectories(categoryDir))
+        {
             if (IsGameFolder(dir))
+            {
                 yield return dir;
+            }
+        }
     }
 
     private static bool IsGameFolder(string dir)
@@ -118,19 +123,19 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
     private static IEnumerable<string> GetAllGameFolders(string root)
     {
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-        // 1) Uncategorized
         foreach (var dir in Directory.GetDirectories(root))
         {
             if (IsGameFolder(dir) && seen.Add(dir))
                 yield return dir;
         }
 
-        // 2) Kategorier (kun 1 niveau dybt)
         foreach (var cat in Directory.GetDirectories(root))
         {
-            if (IsGameFolder(cat)) continue; // allerede et spil, ikke en kategori
-
+            if (IsGameFolder(cat))
+            {
+                continue;
+            }
+            
             foreach (var dir in Directory.GetDirectories(cat))
             {
                 if (IsGameFolder(dir) && seen.Add(dir))
@@ -160,6 +165,7 @@ public partial class SuggestGameWindowViewModel : ViewModelBase
             }
             catch
             {
+                AppLog.Warn("Couldn't load cover, dir: " +  coverPath);
                 return FallbackCover;
             }
         }
