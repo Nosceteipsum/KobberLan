@@ -352,3 +352,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /KobberLan/.idea
+/_ExampleGames (GNU opensource)
+/KobberLan/Assets/Games
+/_Release

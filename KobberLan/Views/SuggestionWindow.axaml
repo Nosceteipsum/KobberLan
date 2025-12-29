@@ -1,0 +1,87 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:KobberLan.ViewModels"
+        xmlns:models="clr-namespace:KobberLan.Models"
+        x:Class="KobberLan.Views.SuggestGameWindow"
+        x:DataType="vm:SuggestGameWindowViewModel"
+        Width="980" Height="620"
+        Title="Choose Game"
+        WindowStartupLocation="CenterOwner">
+
+  <DockPanel Margin="12" LastChildFill="True">
+
+    <!-- Top bar -->
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10">
+      <TextBlock VerticalAlignment="Center" Text="Games:"/>
+      <Button Content="Refresh"
+              Command="{Binding RefreshCommand}"/>
+    </StackPanel>
+
+    <ComboBox Width="260"
+              ItemsSource="{Binding Folders}"
+              SelectedItem="{Binding SelectedFolder}">
+      <ComboBox.ItemTemplate>
+        <DataTemplate x:DataType="vm:GameFolder">
+          <TextBlock Text="{Binding Name}"/>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
+    
+    <!-- Main area: cover grid -->
+    <Border BorderThickness="1" BorderBrush="#444" CornerRadius="6" Padding="10" Margin="0,12,0,0">
+      <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding FilteredGames}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:LocalGame">
+
+              <Button Padding="0"
+                      Margin="6"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      CommandParameter="{Binding}"
+                      Click="Game_Click">
+
+                <Border Width="260"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        BorderBrush="#333"
+                        Background="#111"
+                        ClipToBounds="True">
+
+                  <Border.Styles>
+                    <!-- Hover effect -->
+                    <Style Selector="Border:pointerover">
+                      <Setter Property="BorderBrush" Value="#777"/>
+                    </Style>
+                  </Border.Styles>
+
+                  <StackPanel>
+                    <Border Height="150" ClipToBounds="True">
+                      <Image Source="{Binding Cover}"
+                             Stretch="UniformToFill"/>
+                    </Border>
+
+                    <TextBlock Text="{Binding Title}"
+                               TextAlignment="Center"
+                               FontWeight="Bold"
+                               Margin="8,8,8,10"/>
+                  </StackPanel>
+
+                </Border>
+              </Button>
+
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+  </DockPanel>
+</Window>

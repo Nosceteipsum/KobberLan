@@ -8,7 +8,9 @@
         x:Name="Main"
         x:Class="KobberLan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="avares://KobberLan/Assets/mesh0.ico"
+        Width="900"
+        Height="600"        
+        Icon="{Binding WindowIcon}"
         Title="{Binding WindowTitle}">
 
     <DockPanel>
@@ -21,14 +23,14 @@
             </MenuItem>
 
             <MenuItem Header="Suggest">
-                <MenuItem Header="Suggest game" />
+                <MenuItem Header="Suggest game" Click="SuggestGame_Click" />
                 <MenuItem Header="Suggest game from HDD" />
                 <MenuItem Header="Suggest game from Internet" />
             </MenuItem>
 
             <MenuItem Header="Network">
                 <MenuItem Header="Network interface" Click="Interface_Click"/>
-                <MenuItem Header="Resend broadcast"/>
+                <MenuItem Header="Resend broadcast" Click="ResendBroadcast_Click"/>
             </MenuItem>
           <MenuItem Header="About" Click="About_Click"/>
         </Menu>
@@ -36,7 +38,7 @@
         <!-- Main content -->
         <ScrollViewer>
           <ItemsControl ItemsSource="{Binding Games}">
-            <!-- Wrap layout: cards flyder og “wrap’er” -->
+            <!-- Wrap layout -->
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>
                 <WrapPanel Orientation="Horizontal" />
@@ -108,8 +110,7 @@
             </ItemsControl.ItemTemplate>
           </ItemsControl>
         </ScrollViewer>
-        
-        
+      
     </DockPanel>
 
 </Window>

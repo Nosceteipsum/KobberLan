@@ -11,8 +11,8 @@ namespace KobberLan.Views
         public MainWindow()
         {
             InitializeComponent();
-            Opened += (_, _) => (DataContext as MainWindowViewModel)?.StartDiscovery();
-            Closed += (_, _) => (DataContext as MainWindowViewModel)?.StopDiscovery();            
+            Opened += (_, _) => (DataContext as MainWindowViewModel)?.GetBroadCastService().StartDiscovery();
+            Closed += (_, _) => (DataContext as MainWindowViewModel)?.GetBroadCastService().StopDiscovery();            
         }
         
         private async void About_Click(object? sender, RoutedEventArgs e)
@@ -27,6 +27,42 @@ namespace KobberLan.Views
                 AppLog.Error("About_Click exception.",ex);
             }
         }
+
+        private async void ResendBroadcast_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (DataContext is MainWindowViewModel vm)
+                {
+                    await vm.GetBroadCastService().BroadcastSearchAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("ResendBroadcast_Click exception.",ex);
+            }
+        }
+        
+        private async void SuggestGame_Click(object? sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var w = new SuggestGameWindow
+                {
+                    DataContext = new SuggestGameWindowViewModel()
+                };
+
+                var ok = await w.ShowDialog<bool>(this);
+                if (ok && w.Result is not null)
+                {
+                    (DataContext as MainWindowViewModel)?.SuggestGame(w.Result);
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLog.Error("SuggestGame_Click exception.",ex);
+            }
+        }        
         
         private async void Interface_Click(object? sender, RoutedEventArgs e)
         {
@@ -43,9 +79,10 @@ namespace KobberLan.Views
             }
         }
         
-        private void ShowLog_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void ShowLog_Click(object? sender, RoutedEventArgs e)
         {
             new LogWindow().ShowDialog(this);
-        }        
+        }
+
     }
 }

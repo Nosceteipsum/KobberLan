@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -7,16 +8,25 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using KobberLan.Models;
+using KobberLan.Utilities;
 
-namespace KobberLan.Utilities;
+namespace KobberLan.Services;
 
-public sealed class DiscoveryService : IAsyncDisposable
+public class BroadCastService : IBroadCastService, IAsyncDisposable
 {
+    public bool FirewallSeemsOk { get; private set; } = false;
+
+    public event Action<IPAddress>? OnPeerUp;
+    public event Action<IPAddress>? OnPeerDown;
+    public NetworkAdapterInfo? SelectedAdapter { get; set; }
+
+    private readonly ObservableCollection<NetworkAdapterInfo> refAdapters;
+    
     private const string MSG_SEARCH = "B";
     private const string MSG_DISCONNECT = "D";
     private const string MSG_PORTCHECK = "P";
 
-    private readonly int _port;
     private readonly HashSet<IPAddress> _peers = new();
     private readonly object _lock = new();
 
@@ -29,16 +39,15 @@ public sealed class DiscoveryService : IAsyncDisposable
     private IPAddress? _localIp;
     private IPAddress? _broadcastIp;
 
-    public bool FirewallSeemsOk { get; private set; } = false;
+    private List<string> PlayerIps { get; } = new();
+    
+    private readonly int _port = 50000;
 
-    public event Action<IPAddress>? OnPeerUp;
-    public event Action<IPAddress>? OnPeerDown;
-
-    public DiscoveryService(int port)
+    public BroadCastService(ObservableCollection<NetworkAdapterInfo> adapters)
     {
-        _port = port;
+        refAdapters = adapters;
     }
-
+    
     public void Start(IPAddress localIp)
     {
         if (_cts is not null)
@@ -59,7 +68,7 @@ public sealed class DiscoveryService : IAsyncDisposable
         AppLog.Info($"Discovery started. Local={_localIp} Broadcast={_broadcastIp} Port={_port}");
         _listenTask = ListenLoopAsync(_cts.Token);
     }
-
+    
     public async Task StopAsync()
     {
         if (_cts is null)
@@ -74,7 +83,7 @@ public sealed class DiscoveryService : IAsyncDisposable
         }
         catch { /* ignore shutdown errors */ }
 
-        _cts.Cancel();
+        await _cts.CancelAsync();
 
         try
         {
@@ -95,12 +104,7 @@ public sealed class DiscoveryService : IAsyncDisposable
 
         AppLog.Info("Discovery stopped.");
     }
-
-    public async ValueTask DisposeAsync()
-    {
-        await StopAsync();
-    }
-
+    
     public Task BroadcastSearchAsync() => SendAsync(MSG_SEARCH);
 
     private async Task SendAsync(string msg)
@@ -110,8 +114,88 @@ public sealed class DiscoveryService : IAsyncDisposable
         var data = Encoding.ASCII.GetBytes(msg);
         await _sender.SendAsync(data, data.Length, new IPEndPoint(_broadcastIp, _port));
         AppLog.Info($"Broadcast sent: '{msg}' -> {_broadcastIp}:{_port}");
+    }    
+    
+    public async ValueTask DisposeAsync()
+    {
+        await StopAsync();
+    }    
+    
+    public void RefreshAdapters()
+    {
+        refAdapters.Clear();
+        foreach (var adapterInfo in NetworkAdapters.GetUsableIPv4Adapters())
+        {
+            refAdapters.Add(adapterInfo);
+        }
+
+        if (SelectedAdapter is not null)
+        {
+            var stillThere = refAdapters.FirstOrDefault(x => x.Id == SelectedAdapter.Id);
+            if (stillThere is not null)
+            {
+                SelectedAdapter = stillThere;
+            }
+        }
+
+        SelectedAdapter ??= refAdapters.FirstOrDefault();
+    }
+    
+    public async Task StartDiscovery()
+    {
+        AppLog.Info("Starting discovery...");
+        if (SelectedAdapter?.IPv4 == null)
+        {
+            AppLog.Warn("SelectedAdapter is null, can't send broadcast");
+            return;
+        }
+
+        try
+        {
+            Start(SelectedAdapter.IPv4);
+            await BroadcastSearchAsync();
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error("Error starting discovery", ex);
+        }
+    }
+        
+    public async Task StopDiscovery()
+    {
+        AppLog.Info("Stop discovery...");
+        await StopAsync();
     }
 
+    public List<string> GetPlayerIps()
+    {
+        return PlayerIps;
+    }
+    
+    public void AddPlayerIp(IPAddress ip)
+    {
+        if (PlayerIps.Contains(ip.ToString()))
+        {
+            AppLog.Warn("OnPeerUp, IP already exist: " + ip);
+        }
+        else
+        {
+            PlayerIps.Add(ip.ToString());
+        }
+    }
+
+    public void RemovePlayerIp(IPAddress ip)
+    {
+        if (PlayerIps.Contains(ip.ToString()))
+        {
+            PlayerIps.Remove(ip.ToString());
+        }
+        else
+        {
+            AppLog.Warn("OnPeerDown, IP does not exist? " + ip);
+        }            
+    }        
+    
     private async Task ListenLoopAsync(CancellationToken ct)
     {
         if (_listener is null) return;
@@ -213,8 +297,7 @@ public sealed class DiscoveryService : IAsyncDisposable
         var mask = ni?.IPv4Mask;
         if (mask is null)
         {
-            // fallback: "global" broadcast (often works, but not always on all setups)
-            return IPAddress.Broadcast;
+            return IPAddress.Broadcast; // fallback: "global" broadcast (often works, but not always on all setups)
         }
 
         var ipBytes = localIp.GetAddressBytes();
@@ -222,9 +305,12 @@ public sealed class DiscoveryService : IAsyncDisposable
         var bcBytes = new byte[4];
 
         for (int i = 0; i < 4; i++)
+        {
             bcBytes[i] = (byte)(ipBytes[i] | (maskBytes[i] ^ 255));
+        }
 
         return new IPAddress(bcBytes);
-    }
-
+    }    
+    
+    
 }
