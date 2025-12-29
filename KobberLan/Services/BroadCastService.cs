@@ -39,6 +39,8 @@ public class BroadCastService : IBroadCastService, IAsyncDisposable
     private IPAddress? _localIp;
     private IPAddress? _broadcastIp;
 
+    private List<string> PlayerIps { get; } = new();
+    
     private readonly int _port = 5000;
 
     public BroadCastService(ObservableCollection<NetworkAdapterInfo> adapters)
@@ -164,6 +166,35 @@ public class BroadCastService : IBroadCastService, IAsyncDisposable
         AppLog.Info("Stop discovery...");
         await StopAsync();
     }
+
+    public List<string> GetPlayerIps()
+    {
+        return PlayerIps;
+    }
+    
+    public void AddPlayerIp(IPAddress ip)
+    {
+        if (PlayerIps.Contains(ip.ToString()))
+        {
+            AppLog.Warn("OnPeerUp, IP already exist: " + ip);
+        }
+        else
+        {
+            PlayerIps.Add(ip.ToString());
+        }
+    }
+
+    public void RemovePlayerIp(IPAddress ip)
+    {
+        if (PlayerIps.Contains(ip.ToString()))
+        {
+            PlayerIps.Remove(ip.ToString());
+        }
+        else
+        {
+            AppLog.Warn("OnPeerDown, IP does not exist? " + ip);
+        }            
+    }        
     
     private async Task ListenLoopAsync(CancellationToken ct)
     {
@@ -280,5 +311,6 @@ public class BroadCastService : IBroadCastService, IAsyncDisposable
 
         return new IPAddress(bcBytes);
     }    
+    
     
 }

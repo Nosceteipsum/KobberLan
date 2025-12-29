@@ -22,8 +22,6 @@ namespace KobberLan.ViewModels
         [ObservableProperty] private WindowIcon? windowIcon;
         [ObservableProperty] private LocalGame? selectedSuggestedGame;        
         [ObservableProperty] private NetworkAdapterInfo? selectedAdapter;
-
-        private List<string> PlayerIps { get; } = new();
         
         private readonly IGameConfigService gameConfigService;
         private readonly ICoverService coverService;
@@ -61,7 +59,7 @@ namespace KobberLan.ViewModels
                 FolderPath =  game.FolderPath,
                 Cover = coverService.LoadCover(game),
                 Likes = 0,
-                Players = 1
+                Players = 0
             });
             
             // todo: UDP broadcast new game
@@ -98,11 +96,11 @@ namespace KobberLan.ViewModels
         
         public void RefreshTitle()
         {
-            WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4} - Players: {PlayerIps.Count}";
+            WindowTitle = $"KobberLan - IP:{SelectedAdapter?.IPv4} - Players: {broadCastService.GetPlayerIps().Count}";
             
             //Refresh icon
             var asm = typeof(App).Assembly.GetName().Name;
-            var iconName = PlayerIps.Count <= 9 ? $"mesh{PlayerIps.Count}.ico" : "meshX.ico";
+            var iconName = broadCastService.GetPlayerIps().Count <= 9 ? $"mesh{broadCastService.GetPlayerIps().Count}.ico" : "meshX.ico";
             var uri = new Uri($"avares://{asm}/Assets/{iconName}");
             WindowIcon = new WindowIcon(AssetLoader.Open(uri));
         }
@@ -111,32 +109,8 @@ namespace KobberLan.ViewModels
         
         private void InitBroadcast()
         {
-            broadCastService.OnPeerUp += ip => Dispatcher.UIThread.Post(() => AddPlayerIp(ip));
-            broadCastService.OnPeerDown += ip => Dispatcher.UIThread.Post(() => RemovePlayerIp(ip));     
-        }
-
-        private void AddPlayerIp(IPAddress ip)
-        {
-            if (PlayerIps.Contains(ip.ToString()))
-            {
-                AppLog.Warn("OnPeerUp, IP already exist: " + ip);
-            }
-            else
-            {
-                PlayerIps.Add(ip.ToString());
-            }
-        }
-
-        private void RemovePlayerIp(IPAddress ip)
-        {
-            if (PlayerIps.Contains(ip.ToString()))
-            {
-                PlayerIps.Remove(ip.ToString());
-            }
-            else
-            {
-                AppLog.Warn("OnPeerDown, IP does not exist? " + ip);
-            }            
+            broadCastService.OnPeerUp += ip => Dispatcher.UIThread.Post(() => broadCastService.AddPlayerIp(ip));
+            broadCastService.OnPeerDown += ip => Dispatcher.UIThread.Post(() => broadCastService.RemovePlayerIp(ip));     
         }
         
     }
