@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -29,11 +27,14 @@ namespace KobberLan.ViewModels
         [ObservableProperty] private LocalGame? selectedSuggestedGame;        
         
         private readonly DiscoveryService discovery = new(port: 50000);
+        
         private readonly IGameConfigService gameConfigService;
+        private readonly ICoverService coverService;
         
         public MainWindowViewModel()
         {
             gameConfigService = new GameConfigService();
+            coverService = new CoverService();
             
             var asm = typeof(App).Assembly.GetName().Name;
             var uri = new Uri($"avares://{asm}/Assets/mesh0.ico");
@@ -47,29 +48,12 @@ namespace KobberLan.ViewModels
         public void SuggestGame(LocalGame game)
         {
             SelectedSuggestedGame = game;
-
-            //Show game cover
-            var coverPath = Path.Combine(game.FolderPath, "_kobberlan.jpg");
-
-            Bitmap? bmp = null;
-            if (File.Exists(coverPath))
-            {
-                using var fs = File.OpenRead(coverPath);
-                bmp = new Bitmap(fs);
-            }
-            else
-            {
-                // fallback asset
-                using var s = AssetLoader.Open(new Uri("avares://KobberLan/Assets/covermissing.jpg"));
-                bmp = new Bitmap(s);
-            }
-            
             Games.Add(new GameCard
             {
                 Title = game.Title,
                 Key = game.Key,
                 FolderPath =  game.FolderPath,
-                Cover = bmp,
+                Cover = coverService.LoadCover(game),
                 Likes = 0,
                 Players = 1
             });
